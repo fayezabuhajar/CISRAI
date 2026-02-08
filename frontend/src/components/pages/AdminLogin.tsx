@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldCheck, Lock, User } from 'lucide-react';
+import { ShieldCheck, Lock, User, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface AdminLoginProps {
   language: 'en' | 'ar';
-  onLogin: () => void;
 }
 
-export default function AdminLogin({ language, onLogin }: AdminLoginProps) {
-  const [username, setUsername] = useState('');
+export default function AdminLogin({ language }: AdminLoginProps) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const { login, isLoading, error, clearError } = useAuth();
   const navigate = useNavigate();
   const isRtl = language === 'ar';
 
@@ -19,31 +19,33 @@ export default function AdminLogin({ language, onLogin }: AdminLoginProps) {
     en: {
       title: 'Admin Dashboard Login',
       subtitle: 'Secure access to conference management',
-      username: 'Username',
+      email: 'Email',
       password: 'Password',
       login: 'Login',
-      error: 'Invalid credentials. Please try again.',
-      demo: 'Demo credentials: admin / admin123'
+      loginError: 'Login failed. Please check your credentials.',
+      loading: 'Signing in...'
     },
     ar: {
       title: 'تسجيل دخول لوحة الإدارة',
       subtitle: 'الوصول الآمن لإدارة المؤتمر',
-      username: 'اسم المستخدم',
+      email: 'البريد الإلكتروني',
       password: 'كلمة المرور',
       login: 'تسجيل الدخول',
-      error: 'بيانات الاعتماد غير صحيحة. يرجى المحاولة مرة أخرى.',
-      demo: 'بيانات تجريبية: admin / admin123'
+      loginError: 'فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد.',
+      loading: 'جاري تسجيل الدخول...'
     }
   }[language];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple demo authentication
-    if (username === 'admin' && password === 'admin123') {
-      onLogin();
+    clearError();
+    try {
+      await login(email, password);
       navigate('/admin/dashboard');
-    } else {
-      setError(t.error);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      // Error is already set in context
+      
     }
   };
 
@@ -81,16 +83,17 @@ export default function AdminLogin({ language, onLogin }: AdminLoginProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-xs font-bold text-emerald-900/50 uppercase tracking-widest mb-2">
-                {t.username}
+                {t.email}
               </label>
               <div className="relative">
                 <User className={`absolute ${isRtl ? 'right-4' : 'left-4'} top-3.5 text-emerald-600`} size={18} />
                 <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className={`w-full ${isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-3 rounded-xl border border-emerald-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all`}
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -107,33 +110,34 @@ export default function AdminLogin({ language, onLogin }: AdminLoginProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   className={`w-full ${isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-3 rounded-xl border border-emerald-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all`}
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl text-sm">
-                {error}
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl text-sm flex items-gap-2"
+              >
+                <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                <span>{error}</span>
+              </motion.div>
             )}
 
             <button
               type="submit"
-              className="w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-3"
+              disabled={isLoading}
+              className="w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ShieldCheck size={20} />
-              <span>{t.login}</span>
+              <span>{isLoading ? t.loading : t.login}</span>
             </button>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-8 text-center">
-            <div className="text-xs text-neutral-400 bg-neutral-50 px-4 py-3 rounded-xl">
-              {t.demo}
-            </div>
-          </div>
         </div>
       </motion.div>
     </div>
   );
 }
+

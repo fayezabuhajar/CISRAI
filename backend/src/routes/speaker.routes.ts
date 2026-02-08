@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { speakerController } from "../controllers/speaker.controller";
-import { createSpeakerValidator, idValidator } from "../validators/index";
+import {
+  createSpeakerValidator,
+  updateSpeakerValidator,
+  idValidator,
+} from "../validators/index";
 import { handleValidationErrors } from "../middleware/validationHandler";
 import { adminAuthMiddleware } from "../middleware/auth";
 
@@ -26,6 +30,7 @@ router.get(
 router.put(
   "/:id",
   adminAuthMiddleware,
+  updateSpeakerValidator(),
   idValidator(),
   handleValidationErrors,
   speakerController.updateSpeaker,

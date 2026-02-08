@@ -19,6 +19,14 @@ export interface EmailOptions {
 }
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
+  if (!env.EMAIL_USER || !env.EMAIL_PASSWORD) {
+    console.warn(
+      "⚠ Email credentials not configured. Skipping email to:",
+      options.to,
+    );
+    return;
+  }
+
   const mailOptions = {
     from: env.EMAIL_FROM,
     to: options.to,

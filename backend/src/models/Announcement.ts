@@ -37,7 +37,7 @@ const announcementSchema = new Schema<IAnnouncementDocument>(
       default: true,
     },
     createdBy: {
-      type: Schema.Types.ObjectId as any,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },

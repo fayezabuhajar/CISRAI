@@ -70,11 +70,12 @@ async function testMongoDB() {
 
     await mongoose.disconnect();
     process.exit(0);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.log(`${colors.red}✗ MongoDB Connection Failed${colors.reset}\n`);
-    console.log(`${colors.bold}Error:${colors.reset} ${error.message}\n`);
+    console.log(`${colors.bold}Error:${colors.reset} ${errorMessage}\n`);
 
-    if (error.message.includes("ECONNREFUSED")) {
+    if (errorMessage.includes("ECONNREFUSED")) {
       console.log(`${colors.yellow}${colors.bold}💡 Solution:${colors.reset}`);
       console.log(`  MongoDB is not running. Try one of these:\n`);
       console.log(
@@ -103,7 +104,7 @@ async function testMongoDB() {
       console.log(`    - Install and run installer\n`);
     }
 
-    if (error.message.includes("authentication failed")) {
+    if (errorMessage.includes("authentication failed")) {
       console.log(`${colors.yellow}${colors.bold}💡 Solution:${colors.reset}`);
       console.log(`  Check your MongoDB credentials in .env file\n`);
     }

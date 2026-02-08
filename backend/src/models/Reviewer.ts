@@ -4,9 +4,9 @@ import { IReviewer } from "../types/index";
 const reviewerSchema = new Schema<IReviewer>(
   {
     userId: {
-      type: Schema.Types.ObjectId as any,
+      type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
     fullName: {
       type: String,
@@ -20,7 +20,7 @@ const reviewerSchema = new Schema<IReviewer>(
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     affiliation: {
       type: String,
@@ -30,11 +30,11 @@ const reviewerSchema = new Schema<IReviewer>(
     expertise: [String],
     experience: {
       type: Number,
-      required: true,
+      required: false,
     },
     bio: {
       type: String,
-      required: true,
+      required: false,
     },
     cv: String,
     status: {

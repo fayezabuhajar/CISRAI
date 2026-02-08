@@ -3,6 +3,13 @@ import { paperService } from "../services/paper.service";
 import { successResponse, errorResponse } from "../utils/response";
 import { getPaginationParams, getPaginationMeta } from "../utils/pagination";
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+};
+
 export const paperController = {
   async submitPaper(req: Request, res: Response) {
     try {
@@ -11,10 +18,10 @@ export const paperController = {
       res
         .status(201)
         .json(successResponse("Paper submitted successfully", paper, 201));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Submission failed", error.message, 400));
+        .json(errorResponse("Submission failed", getErrorMessage(error), 400));
     }
   },
 
@@ -36,10 +43,12 @@ export const paperController = {
           meta: getPaginationMeta(total, page, limit),
         }),
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
-        .json(errorResponse("Error retrieving papers", error.message, 500));
+        .json(
+          errorResponse("Error retrieving papers", getErrorMessage(error), 500),
+        );
     }
   },
 
@@ -48,10 +57,10 @@ export const paperController = {
       const paper = await paperService.getPaperById(req.params.id);
 
       res.status(200).json(successResponse("Paper retrieved", paper));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(404)
-        .json(errorResponse("Paper not found", error.message, 404));
+        .json(errorResponse("Paper not found", getErrorMessage(error), 404));
     }
   },
 
@@ -62,10 +71,10 @@ export const paperController = {
       res
         .status(200)
         .json(successResponse("Paper accepted successfully", paper));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Acceptance failed", error.message, 400));
+        .json(errorResponse("Acceptance failed", getErrorMessage(error), 400));
     }
   },
 
@@ -75,10 +84,10 @@ export const paperController = {
       const paper = await paperService.rejectPaper(req.params.id, reason);
 
       res.status(200).json(successResponse("Paper rejected", paper));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Rejection failed", error.message, 400));
+        .json(errorResponse("Rejection failed", getErrorMessage(error), 400));
     }
   },
 
@@ -87,10 +96,10 @@ export const paperController = {
       await paperService.deletePaper(req.params.id);
 
       res.status(200).json(successResponse("Paper deleted successfully"));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Deletion failed", error.message, 400));
+        .json(errorResponse("Deletion failed", getErrorMessage(error), 400));
     }
   },
 };

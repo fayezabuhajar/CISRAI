@@ -1,160 +1,188 @@
-import { useState } from 'react';
-import { Search, Mail, MailOpen, Calendar, User, MessageSquare, Eye } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useEffect, useMemo, useState } from "react";
+import {
+  Search,
+  Mail,
+  MailOpen,
+  Calendar,
+  User,
+  MessageSquare,
+  Trash,
+  Loader,
+} from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { messageAPI } from "../../services/api";
 
 interface MessagesManagementProps {
-  language: 'en' | 'ar';
+  language: "en" | "ar";
 }
 
 interface Message {
-  id: string;
+  _id: string;
   senderName: string;
-  email: string;
+  senderEmail: string;
   subject: string;
-  content: string;
-  date: string;
-  isRead: boolean;
+  message: string;
+  createdAt: string;
+  status: "unread" | "read" | "replied";
+  response?: string;
 }
 
-export default function MessagesManagement({ language }: MessagesManagementProps) {
-  const isRtl = language === 'ar';
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      senderName: 'Dr. Ahmed Al-Rashid',
-      email: 'ahmed.rashid@university.edu',
-      subject: 'Conference Schedule Inquiry',
-      content: 'Dear Conference Committee, I would like to inquire about the detailed schedule for the conference sessions. Could you please provide information about the timing of presentations and breaks? Looking forward to your response.',
-      date: '2026-01-30T14:30:00',
-      isRead: false
-    },
-    {
-      id: '2',
-      senderName: 'Prof. Fatima Hassan',
-      email: 'fatima.hassan@university.edu',
-      subject: 'Accommodation Recommendations',
-      content: 'Hello, I am traveling from Saudi Arabia to attend the conference. Could you recommend hotels near the conference venue? Also, are there any special rates for conference participants?',
-      date: '2026-01-29T10:15:00',
-      isRead: false
-    },
-    {
-      id: '3',
-      senderName: 'Mohammad Khalil',
-      email: 'mohammad.khalil@student.edu',
-      subject: 'Student Registration Discount',
-      content: 'Greetings, I am a PhD student interested in attending the conference. I noticed there are different registration fees. Is there a student discount available? What documentation is required?',
-      date: '2026-01-28T16:45:00',
-      isRead: true
-    },
-    {
-      id: '4',
-      senderName: 'Dr. Sara Al-Mahmoud',
-      email: 'sara.mahmoud@researcher.org',
-      subject: 'Paper Submission Extension Request',
-      content: 'Dear Organizing Committee, Due to unforeseen circumstances, I am requesting a brief extension for my paper submission. Would it be possible to get an additional week? The paper is nearly complete.',
-      date: '2026-01-27T09:20:00',
-      isRead: true
-    },
-    {
-      id: '5',
-      senderName: 'Ali Hassan',
-      email: 'ali.hassan@institute.edu',
-      subject: 'Partnership Opportunity',
-      content: 'Hello, Our institute is interested in partnering with your conference for future events. We would like to discuss potential collaboration opportunities. Please let us know how we can proceed.',
-      date: '2026-01-26T11:00:00',
-      isRead: false
-    },
-  ]);
+export default function MessagesManagement({
+  language,
+}: MessagesManagementProps) {
+  const isRtl = language === "ar";
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+
+  useEffect(() => {
+    loadMessages();
+  }, []);
+
+  const loadMessages = async () => {
+    try {
+      setLoading(true);
+      const response = (await messageAPI.getAll(1, 200)) as {
+        success?: boolean;
+        data?: { data?: Message[] };
+      };
+
+      const payload = response.data?.data ?? [];
+      if (response.success && Array.isArray(payload)) {
+        setMessages(payload);
+      }
+    } catch (error) {
+      console.error("Failed to load messages:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const t = {
     en: {
-      title: 'Contact Messages',
-      subtitle: 'Manage inquiries and contact form submissions',
-      search: 'Search messages...',
-      filterByStatus: 'Filter by Status',
-      all: 'All Messages',
-      unread: 'Unread',
-      read: 'Read',
-      sender: 'Sender',
-      subject: 'Subject',
-      date: 'Date',
-      status: 'Status',
-      viewMessage: 'View Message',
-      markAsRead: 'Mark as Read',
-      markAsUnread: 'Mark as Unread',
-      totalMessages: 'Total Messages',
-      unreadMessages: 'Unread Messages',
-      close: 'Close',
-      from: 'From',
-      email: 'Email',
-      receivedOn: 'Received On'
+      title: "Contact Messages",
+      subtitle: "Manage inquiries and contact form submissions",
+      search: "Search messages...",
+      filterByStatus: "Filter by Status",
+      all: "All Messages",
+      unread: "Unread",
+      read: "Read",
+      sender: "Sender",
+      subject: "Subject",
+      date: "Date",
+      status: "Status",
+      viewMessage: "View Message",
+      markAsRead: "Mark as Read",
+      markAsUnread: "Mark as Unread",
+      totalMessages: "Total Messages",
+      unreadMessages: "Unread Messages",
+      close: "Close",
+      from: "From",
+      email: "Email",
+      receivedOn: "Received On",
+      delete: "Delete",
+      confirmDelete: "Delete this message?",
     },
     ar: {
-      title: 'رسائل التواصل',
-      subtitle: 'إدارة الاستفسارات ونماذج الاتصال',
-      search: 'البحث في الرسائل...',
-      filterByStatus: 'تصفية حسب الحالة',
-      all: 'جميع الرسائل',
-      unread: 'غير مقروءة',
-      read: 'مقروءة',
-      sender: 'المرسل',
-      subject: 'الموضوع',
-      date: 'التاريخ',
-      status: 'الحالة',
-      viewMessage: 'عرض الرسالة',
-      markAsRead: 'تعليم كمقروءة',
-      markAsUnread: 'تعليم كغير مقروءة',
-      totalMessages: 'إجمالي الرسائل',
-      unreadMessages: 'الرسائل غير المقروءة',
-      close: 'إغلاق',
-      from: 'من',
-      email: 'البريد الإلكتروني',
-      receivedOn: 'استلمت في'
-    }
+      title: "رسائل التواصل",
+      subtitle: "إدارة الاستفسارات ونماذج الاتصال",
+      search: "البحث في الرسائل...",
+      filterByStatus: "تصفية حسب الحالة",
+      all: "جميع الرسائل",
+      unread: "غير مقروءة",
+      read: "مقروءة",
+      sender: "المرسل",
+      subject: "الموضوع",
+      date: "التاريخ",
+      status: "الحالة",
+      viewMessage: "عرض الرسالة",
+      markAsRead: "تعليم كمقروءة",
+      markAsUnread: "تعليم كغير مقروءة",
+      totalMessages: "إجمالي الرسائل",
+      unreadMessages: "الرسائل غير المقروءة",
+      close: "إغلاق",
+      from: "من",
+      email: "البريد الإلكتروني",
+      receivedOn: "استلمت في",
+      delete: "حذف",
+      confirmDelete: "هل تريد حذف هذه الرسالة؟",
+    },
   }[language];
 
-  const filteredMessages = messages.filter(m => {
-    const matchesSearch =
-      m.senderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.content.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesStatus = 
-      statusFilter === 'all' ||
-      (statusFilter === 'unread' && !m.isRead) ||
-      (statusFilter === 'read' && m.isRead);
+  const filteredMessages = useMemo(() => {
+    return messages.filter((m) => {
+      const matchesSearch =
+        m.senderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.senderEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m.message.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesSearch && matchesStatus;
-  });
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "unread" && m.status === "unread") ||
+        (statusFilter === "read" && m.status !== "unread");
 
-  const unreadCount = messages.filter(m => !m.isRead).length;
+      return matchesSearch && matchesStatus;
+    });
+  }, [messages, searchQuery, statusFilter]);
+
+  const unreadCount = useMemo(
+    () => messages.filter((m) => m.status === "unread").length,
+    [messages],
+  );
 
   const toggleReadStatus = (id: string) => {
-    setMessages(messages.map(m =>
-      m.id === id ? { ...m, isRead: !m.isRead } : m
-    ));
+    setMessages(
+      messages.map((m) =>
+        m._id === id
+          ? { ...m, status: m.status === "unread" ? "read" : "unread" }
+          : m,
+      ),
+    );
   };
 
-  const viewMessage = (message: Message) => {
+  const viewMessage = async (message: Message) => {
     setSelectedMessage(message);
-    if (!message.isRead) {
-      toggleReadStatus(message.id);
+    if (message.status === "unread") {
+      try {
+        await messageAPI.getById(message._id);
+        await loadMessages();
+      } catch (error) {
+        console.error("Failed to mark message as read:", error);
+      }
+    }
+  };
+
+  const deleteMessage = async (id: string) => {
+    const confirmed = window.confirm(t.confirmDelete);
+    if (!confirmed) return;
+
+    try {
+      setDeletingId(id);
+      await messageAPI.delete(id);
+      setMessages((prev) => prev.filter((m) => m._id !== id));
+      if (selectedMessage?._id === id) {
+        setSelectedMessage(null);
+      }
+    } catch (error) {
+      console.error("Failed to delete message:", error);
+    } finally {
+      setDeletingId(null);
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat(isRtl ? 'ar' : 'en', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Intl.DateTimeFormat(isRtl ? "ar" : "en", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -162,14 +190,20 @@ export default function MessagesManagement({ language }: MessagesManagementProps
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-emerald-950 mb-2">{t.title}</h1>
+        <h1 className="text-4xl font-bold text-primary mb-2">{t.title}</h1>
         <p className="text-neutral-500">{t.subtitle}</p>
-        <div className="w-24 h-1 bg-emerald-600 rounded-full mt-4" />
+        <div className="w-24 h-1 bg-accent rounded-full mt-4" />
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl p-6 text-white shadow-lg">
+        <div
+          className="rounded-3xl p-6 text-white shadow-lg"
+          style={{
+            background:
+              "linear-gradient(135deg, var(--accent), var(--primary))",
+          }}
+        >
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
               <Mail size={32} />
@@ -180,7 +214,13 @@ export default function MessagesManagement({ language }: MessagesManagementProps
             </div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-3xl p-6 text-white shadow-lg">
+        <div
+          className="rounded-3xl p-6 text-white shadow-lg"
+          style={{
+            background:
+              "linear-gradient(135deg, var(--destructive), var(--accent))",
+          }}
+        >
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
               <MailOpen size={32} />
@@ -194,18 +234,21 @@ export default function MessagesManagement({ language }: MessagesManagementProps
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-3xl p-6 mb-6 shadow-lg border border-emerald-50">
+      <div className="bg-white rounded-3xl p-6 mb-6 shadow-lg border border-border">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Search */}
           <div>
             <div className="relative">
-              <Search className={`absolute ${isRtl ? 'right-4' : 'left-4'} top-3.5 text-emerald-600`} size={20} />
+              <Search
+                className={`absolute ${isRtl ? "right-4" : "left-4"} top-3.5 text-accent`}
+                size={20}
+              />
               <input
                 type="text"
                 placeholder={t.search}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full ${isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4'} py-3 rounded-xl border border-emerald-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none`}
+                className={`w-full ${isRtl ? "pr-12 pl-4" : "pl-12 pr-4"} py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent focus:border-transparent outline-none`}
               />
             </div>
           </div>
@@ -215,7 +258,7 @@ export default function MessagesManagement({ language }: MessagesManagementProps
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-emerald-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent focus:border-transparent outline-none"
             >
               <option value="all">{t.all}</option>
               <option value="unread">{t.unread}</option>
@@ -226,67 +269,85 @@ export default function MessagesManagement({ language }: MessagesManagementProps
       </div>
 
       {/* Messages List */}
-      <div className="bg-white rounded-3xl shadow-lg border border-emerald-50 overflow-hidden">
-        <div className="divide-y divide-emerald-50">
-          {filteredMessages.map((message) => (
-            <motion.div
-              key={message.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              onClick={() => viewMessage(message)}
-              className={`p-6 hover:bg-emerald-50/50 transition-all cursor-pointer ${
-                !message.isRead ? 'bg-blue-50/30' : ''
-              }`}
-            >
-              <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold shrink-0 ${
-                  message.isRead ? 'bg-emerald-500' : 'bg-blue-600'
-                }`}>
-                  {message.isRead ? <MailOpen size={24} /> : <Mail size={24} />}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-1">
-                        <h3 className={`font-bold text-emerald-950 truncate ${!message.isRead ? 'text-blue-900' : ''}`}>
-                          {message.subject}
-                        </h3>
-                        {!message.isRead && (
-                          <span className="shrink-0 w-2 h-2 bg-blue-600 rounded-full" />
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-neutral-600">
-                        <User size={14} />
-                        <span className="truncate">{message.senderName}</span>
-                        <span className="text-neutral-400">•</span>
-                        <span className="truncate">{message.email}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-neutral-500 shrink-0">
-                      <Calendar size={14} />
-                      <span>{formatDate(message.date)}</span>
-                    </div>
+      <div className="bg-white rounded-3xl shadow-lg border border-border overflow-hidden">
+        {loading ? (
+          <div className="p-6 text-center text-neutral-500">
+            {language === "ar" ? "جاري التحميل..." : "Loading messages..."}
+          </div>
+        ) : (
+          <div className="divide-y divide-neutral-100">
+            {filteredMessages.map((message) => (
+              <motion.div
+                key={message._id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                onClick={() => viewMessage(message)}
+                className={`p-6 hover:bg-accent/5 transition-all cursor-pointer ${
+                  message.status === "unread" ? "bg-primary/5" : ""
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold shrink-0 ${
+                      message.status === "unread" ? "bg-primary" : "bg-accent"
+                    }`}
+                  >
+                    {message.status === "unread" ? (
+                      <Mail size={24} />
+                    ) : (
+                      <MailOpen size={24} />
+                    )}
                   </div>
 
-                  <p className="text-sm text-neutral-600 line-clamp-2 mt-2">
-                    {message.content}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-4 mb-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1">
+                          <h3
+                            className={`font-bold text-primary truncate ${message.status === "unread" ? "text-primary" : ""}`}
+                          >
+                            {message.subject}
+                          </h3>
+                          {message.status === "unread" && (
+                            <span className="shrink-0 w-2 h-2 bg-primary rounded-full" />
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-neutral-600">
+                          <User size={14} />
+                          <span className="truncate">{message.senderName}</span>
+                          <span className="text-neutral-400">•</span>
+                          <span className="truncate">
+                            {message.senderEmail}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-neutral-500 shrink-0">
+                        <Calendar size={14} />
+                        <span>{formatDate(message.createdAt)}</span>
+                      </div>
+                    </div>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleReadStatus(message.id);
-                    }}
-                    className="mt-3 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
-                  >
-                    {message.isRead ? t.markAsUnread : t.markAsRead}
-                  </button>
+                    <p className="text-sm text-neutral-600 line-clamp-2 mt-2">
+                      {message.message}
+                    </p>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleReadStatus(message._id);
+                      }}
+                      className="mt-3 text-sm font-medium text-accent hover:text-primary transition-colors"
+                    >
+                      {message.status === "unread"
+                        ? t.markAsRead
+                        : t.markAsUnread}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Message Detail Modal */}
@@ -307,28 +368,36 @@ export default function MessagesManagement({ language }: MessagesManagementProps
               className="bg-white rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-start justify-between mb-6 pb-6 border-b border-emerald-100">
+              <div className="flex items-start justify-between mb-6 pb-6 border-b border-border">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-xl"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--accent), var(--primary))",
+                    }}
+                  >
                     {selectedMessage.senderName.charAt(0)}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-emerald-950 mb-2">{selectedMessage.subject}</h2>
+                    <h2 className="text-2xl font-bold text-primary mb-2">
+                      {selectedMessage.subject}
+                    </h2>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm text-neutral-600">
-                        <User size={16} className="text-emerald-600" />
+                        <User size={16} className="text-accent" />
                         <span className="font-medium">{t.from}:</span>
                         <span>{selectedMessage.senderName}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-neutral-600">
-                        <Mail size={16} className="text-emerald-600" />
+                        <Mail size={16} className="text-accent" />
                         <span className="font-medium">{t.email}:</span>
-                        <span>{selectedMessage.email}</span>
+                        <span>{selectedMessage.senderEmail}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-neutral-600">
-                        <Calendar size={16} className="text-emerald-600" />
+                        <Calendar size={16} className="text-accent" />
                         <span className="font-medium">{t.receivedOn}:</span>
-                        <span>{formatDate(selectedMessage.date)}</span>
+                        <span>{formatDate(selectedMessage.createdAt)}</span>
                       </div>
                     </div>
                   </div>
@@ -337,13 +406,13 @@ export default function MessagesManagement({ language }: MessagesManagementProps
 
               {/* Content */}
               <div className="mb-8">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-900/50 uppercase tracking-widest mb-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-primary/60 uppercase tracking-widest mb-3">
                   <MessageSquare size={16} />
-                  <span>{isRtl ? 'محتوى الرسالة' : 'Message Content'}</span>
+                  <span>{isRtl ? "محتوى الرسالة" : "Message Content"}</span>
                 </div>
-                <div className="bg-emerald-50 rounded-2xl p-6">
+                <div className="bg-white rounded-2xl p-6 border border-border">
                   <p className="text-neutral-700 leading-relaxed whitespace-pre-wrap">
-                    {selectedMessage.content}
+                    {selectedMessage.message}
                   </p>
                 </div>
               </div>
@@ -351,19 +420,37 @@ export default function MessagesManagement({ language }: MessagesManagementProps
               {/* Actions */}
               <div className="flex gap-3">
                 <button
+                  onClick={() => deleteMessage(selectedMessage._id)}
+                  disabled={deletingId === selectedMessage._id}
+                  className="flex-1 bg-red-50 text-red-700 px-6 py-3 rounded-xl hover:bg-red-100 transition-all font-medium disabled:opacity-60"
+                >
+                  {deletingId === selectedMessage._id ? (
+                    <span className="inline-flex items-center gap-2 justify-center">
+                      <Loader size={16} className="animate-spin" />
+                      {t.delete}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 justify-center">
+                      <Trash size={16} /> {t.delete}
+                    </span>
+                  )}
+                </button>
+                <button
                   onClick={() => setSelectedMessage(null)}
-                  className="flex-1 bg-emerald-900 text-white px-6 py-3 rounded-xl hover:bg-emerald-800 transition-all font-medium"
+                  className="flex-1 bg-primary text-white px-6 py-3 rounded-xl hover:bg-accent transition-all font-medium"
                 >
                   {t.close}
                 </button>
                 <button
                   onClick={() => {
-                    toggleReadStatus(selectedMessage.id);
+                    toggleReadStatus(selectedMessage._id);
                     setSelectedMessage(null);
                   }}
                   className="flex-1 bg-neutral-100 text-neutral-700 px-6 py-3 rounded-xl hover:bg-neutral-200 transition-all font-medium"
                 >
-                  {selectedMessage.isRead ? t.markAsUnread : t.markAsRead}
+                  {selectedMessage.status === "unread"
+                    ? t.markAsRead
+                    : t.markAsUnread}
                 </button>
               </div>
             </motion.div>

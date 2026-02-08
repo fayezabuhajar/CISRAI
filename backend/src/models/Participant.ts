@@ -4,9 +4,9 @@ import { IParticipant } from "../types/index";
 const participantSchema = new Schema<IParticipant>(
   {
     userId: {
-      type: Schema.Types.ObjectId as any,
+      type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
     fullName: {
       type: String,
@@ -25,7 +25,7 @@ const participantSchema = new Schema<IParticipant>(
     },
     country: {
       type: String,
-      required: true,
+      required: false,
     },
     affiliation: {
       type: String,

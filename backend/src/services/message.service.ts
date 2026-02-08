@@ -1,7 +1,8 @@
 import { Message } from "../models/Message";
+import { IMessage } from "../types/index";
 
 export const messageService = {
-  async submitMessage(data: any) {
+  async submitMessage(data: Partial<IMessage>) {
     const message = new Message({
       ...data,
       status: "unread",

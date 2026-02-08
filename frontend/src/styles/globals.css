@@ -2,39 +2,39 @@
 
 :root {
   --font-size: 16px;
-  --background: #F5F0E6;
+  --background: #f5f0e6;
   --foreground: #333333;
-  --card: #F5F0E6;
+  --card: #f5f0e6;
   --card-foreground: #333333;
-  --popover: #F5F0E6;
+  --popover: #f5f0e6;
   --popover-foreground: #333333;
   --primary: #333333;
   --primary-foreground: #ffffff;
-  --secondary: #E6D8AD;
+  --secondary: #e6d8ad;
   --secondary-foreground: #333333;
-  --muted: #E6D8AD;
+  --muted: #e6d8ad;
   --muted-foreground: #64748b;
-  --accent: #D4AF37;
+  --accent: #d4af37;
   --accent-foreground: #ffffff;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(51, 51, 51, 0.1);
   --input: transparent;
   --input-background: #ffffff;
-  --switch-background: #E6D8AD;
+  --switch-background: #e6d8ad;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #D4AF37;
+  --ring: #d4af37;
   --radius: 0.75rem;
   --sidebar: #333333;
-  --sidebar-foreground: #F5F0E6;
-  --sidebar-primary: #D4AF37;
+  --sidebar-foreground: #f5f0e6;
+  --sidebar-primary: #d4af37;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: rgba(212, 175, 55, 0.1);
-  --sidebar-accent-foreground: #F5F0E6;
+  --sidebar-accent-foreground: #f5f0e6;
   --sidebar-border: rgba(245, 240, 230, 0.1);
-  --sidebar-ring: #D4AF37;
-  --teal-accent: #005B5C;
+  --sidebar-ring: #d4af37;
+  --teal-accent: #005b5c;
 }
 
 .dark {
@@ -131,7 +131,7 @@
  * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
  */
 @layer base {
-  :where(:not(:has([class*=' text-']), :not(:has([class^='text-'])))) {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
     h1 {
       font-size: var(--text-2xl);
       font-weight: var(--font-weight-medium);
@@ -197,6 +197,134 @@ html {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* Admin theming overrides to align legacy emerald classes with the primary/accent palette */
+@layer base {
+  .text-emerald-950 {
+    color: var(--primary);
+  }
+
+  .text-emerald-700,
+  .text-emerald-600 {
+    color: var(--accent);
+  }
+
+  .text-emerald-100 {
+    color: color-mix(in oklab, var(--accent) 25%, white);
+  }
+
+  .bg-emerald-50 {
+    background-color: rgba(212, 175, 55, 0.08);
+  }
+
+  .bg-emerald-100 {
+    background-color: rgba(212, 175, 55, 0.14);
+  }
+
+  .bg-emerald-500,
+  .bg-emerald-600 {
+    background-color: var(--accent);
+  }
+
+  .bg-emerald-900 {
+    background-color: var(--primary);
+  }
+
+  .border-emerald-50,
+  .divide-emerald-50 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(212, 175, 55, 0.14);
+  }
+
+  .border-emerald-100 {
+    border-color: rgba(212, 175, 55, 0.24);
+  }
+
+  .border-emerald-200 {
+    border-color: rgba(212, 175, 55, 0.34);
+  }
+
+  /* Utility fallbacks for tint/opacity classes missing from generated CSS */
+  .bg-primary\/5 {
+    background-color: color-mix(in oklab, var(--primary) 5%, transparent);
+  }
+
+  .bg-primary\/10 {
+    background-color: color-mix(in oklab, var(--primary) 10%, transparent);
+  }
+
+  .bg-accent\/5 {
+    background-color: color-mix(in oklab, var(--accent) 5%, transparent);
+  }
+
+  .bg-accent\/10 {
+    background-color: color-mix(in oklab, var(--accent) 10%, transparent);
+  }
+
+  .bg-accent\/20 {
+    background-color: color-mix(in oklab, var(--accent) 20%, transparent);
+  }
+
+  /* Admin scoped overrides to map legacy utility colors onto theme palette */
+  .admin-theme .bg-blue-50,
+  .admin-theme .bg-blue-100 {
+    background-color: color-mix(in oklab, var(--primary) 12%, white);
+  }
+
+  .admin-theme .text-blue-600,
+  .admin-theme .text-blue-700,
+  .admin-theme .text-blue-900 {
+    color: var(--primary);
+  }
+
+  .admin-theme .text-blue-100 {
+    color: color-mix(in oklab, var(--primary) 20%, white);
+  }
+
+  .admin-theme .bg-purple-50,
+  .admin-theme .bg-purple-100 {
+    background-color: color-mix(in oklab, var(--accent) 14%, white);
+  }
+
+  .admin-theme .text-purple-600,
+  .admin-theme .text-purple-700 {
+    color: var(--accent);
+  }
+
+  .admin-theme .bg-amber-50,
+  .admin-theme .bg-amber-100 {
+    background-color: color-mix(in oklab, var(--accent) 16%, white);
+  }
+
+  .admin-theme .text-amber-600,
+  .admin-theme .text-amber-700,
+  .admin-theme .text-amber-100 {
+    color: color-mix(in oklab, var(--accent) 80%, white);
+  }
+}
+
+/* Custom scrollbar for light surfaces (cards) */
+.custom-scrollbar-light {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Ensure mobile views don't get affected by sidebar margin */

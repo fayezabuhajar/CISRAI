@@ -3,6 +3,13 @@ import { reviewerService } from "../services/reviewer.service";
 import { successResponse, errorResponse } from "../utils/response";
 import { getPaginationParams, getPaginationMeta } from "../utils/pagination";
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+};
+
 export const reviewerController = {
   async submitReviewerRequest(req: Request, res: Response) {
     try {
@@ -17,10 +24,10 @@ export const reviewerController = {
             201,
           ),
         );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Submission failed", error.message, 400));
+        .json(errorResponse("Submission failed", getErrorMessage(error), 400));
     }
   },
 
@@ -40,10 +47,16 @@ export const reviewerController = {
           meta: getPaginationMeta(total, page, limit),
         }),
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
-        .json(errorResponse("Error retrieving reviewers", error.message, 500));
+        .json(
+          errorResponse(
+            "Error retrieving reviewers",
+            getErrorMessage(error),
+            500,
+          ),
+        );
     }
   },
 
@@ -52,10 +65,10 @@ export const reviewerController = {
       const reviewer = await reviewerService.getReviewerById(req.params.id);
 
       res.status(200).json(successResponse("Reviewer retrieved", reviewer));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(404)
-        .json(errorResponse("Reviewer not found", error.message, 404));
+        .json(errorResponse("Reviewer not found", getErrorMessage(error), 404));
     }
   },
 
@@ -66,10 +79,10 @@ export const reviewerController = {
       res
         .status(200)
         .json(successResponse("Reviewer approved successfully", reviewer));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Approval failed", error.message, 400));
+        .json(errorResponse("Approval failed", getErrorMessage(error), 400));
     }
   },
 
@@ -82,10 +95,10 @@ export const reviewerController = {
       );
 
       res.status(200).json(successResponse("Reviewer rejected", reviewer));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Rejection failed", error.message, 400));
+        .json(errorResponse("Rejection failed", getErrorMessage(error), 400));
     }
   },
 
@@ -99,8 +112,10 @@ export const reviewerController = {
       res
         .status(200)
         .json(successResponse("Reviewer updated successfully", reviewer));
-    } catch (error: any) {
-      res.status(400).json(errorResponse("Update failed", error.message, 400));
+    } catch (error: unknown) {
+      res
+        .status(400)
+        .json(errorResponse("Update failed", getErrorMessage(error), 400));
     }
   },
 
@@ -109,10 +124,10 @@ export const reviewerController = {
       await reviewerService.deleteReviewer(req.params.id);
 
       res.status(200).json(successResponse("Reviewer deleted successfully"));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Deletion failed", error.message, 400));
+        .json(errorResponse("Deletion failed", getErrorMessage(error), 400));
     }
   },
 };

@@ -8,12 +8,19 @@ interface AuthenticatedRequest extends Request {
   user?: { id: string; email: string; role: string };
 }
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+};
+
 export const registrationController = {
   async registerParticipant(req: AuthenticatedRequest, res: Response) {
     try {
       const data = req.body;
       const participant = await registrationService.registerParticipant(
-        req.user!.id,
+        req.user?.id,
         data,
       );
 
@@ -26,10 +33,12 @@ export const registrationController = {
             201,
           ),
         );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Registration failed", error.message, 400));
+        .json(
+          errorResponse("Registration failed", getErrorMessage(error), 400),
+        );
     }
   },
 
@@ -48,10 +57,16 @@ export const registrationController = {
       res
         .status(200)
         .json(successResponse("Participant profile retrieved", participant));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
-        .json(errorResponse("Error retrieving profile", error.message, 500));
+        .json(
+          errorResponse(
+            "Error retrieving profile",
+            getErrorMessage(error),
+            500,
+          ),
+        );
     }
   },
 
@@ -71,8 +86,10 @@ export const registrationController = {
             updatedParticipant,
           ),
         );
-    } catch (error: any) {
-      res.status(400).json(errorResponse("Update failed", error.message, 400));
+    } catch (error: unknown) {
+      res
+        .status(400)
+        .json(errorResponse("Update failed", getErrorMessage(error), 400));
     }
   },
 
@@ -93,11 +110,87 @@ export const registrationController = {
           meta: getPaginationMeta(total, page, limit),
         }),
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
         .json(
-          errorResponse("Error retrieving participants", error.message, 500),
+          errorResponse(
+            "Error retrieving participants",
+            getErrorMessage(error),
+            500,
+          ),
+        );
+    }
+  },
+
+  async updatePaymentStatus(req: AuthenticatedRequest, res: Response) {
+    try {
+      const participantId = req.params.id;
+      const { paymentStatus, paymentMethod, transactionId } = req.body;
+
+      const updatedParticipant = await registrationService.updateParticipant(
+        participantId,
+        {
+          paymentStatus,
+          paymentMethod,
+          transactionId,
+        },
+      );
+
+      res
+        .status(200)
+        .json(
+          successResponse(
+            "Payment status updated successfully",
+            updatedParticipant,
+          ),
+        );
+    } catch (error: unknown) {
+      res
+        .status(400)
+        .json(
+          errorResponse("Payment update failed", getErrorMessage(error), 400),
+        );
+    }
+  },
+
+  async deleteParticipant(req: AuthenticatedRequest, res: Response) {
+    try {
+      const participantId = req.params.id;
+      const participant = await Participant.findById(participantId);
+
+      if (!participant) {
+        return res
+          .status(404)
+          .json(errorResponse("Participant not found", "", 404));
+      }
+
+      if (participant.paymentStatus === "completed") {
+        return res
+          .status(400)
+          .json(
+            errorResponse(
+              "Cannot delete paid participant",
+              "Payment has been completed",
+              400,
+            ),
+          );
+      }
+
+      await Participant.findByIdAndDelete(participantId);
+
+      res
+        .status(200)
+        .json(successResponse("Participant deleted successfully", null));
+    } catch (error: unknown) {
+      res
+        .status(500)
+        .json(
+          errorResponse(
+            "Error deleting participant",
+            getErrorMessage(error),
+            500,
+          ),
         );
     }
   },
@@ -121,10 +214,12 @@ export const registrationController = {
       };
 
       res.status(200).json(successResponse("Stats retrieved", stats));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
-        .json(errorResponse("Error retrieving stats", error.message, 500));
+        .json(
+          errorResponse("Error retrieving stats", getErrorMessage(error), 500),
+        );
     }
   },
 };

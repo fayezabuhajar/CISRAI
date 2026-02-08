@@ -43,10 +43,13 @@ async function healthCheck() {
             timeout: 5000,
           });
           return response.status === 200;
-        } catch (error: any) {
+        } catch (error: unknown) {
           // If we get a 404 or 401, server is responding
           // If we get connection error, DB is down
-          return error.response?.status !== undefined;
+          if (axios.isAxiosError(error)) {
+            return error.response?.status !== undefined;
+          }
+          return false;
         }
       },
     },
@@ -81,10 +84,9 @@ async function healthCheck() {
         console.log(`${colors.red}✗${colors.reset} ${check.name}`);
         failedCount++;
       }
-    } catch (error: any) {
-      console.log(
-        `${colors.red}✗${colors.reset} ${check.name}: ${error.message}`,
-      );
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      console.log(`${colors.red}✗${colors.reset} ${check.name}: ${message}`);
       failedCount++;
     }
   }
@@ -111,10 +113,8 @@ async function healthCheck() {
   }
 }
 
-healthCheck().catch((error) => {
-  console.error(
-    `${colors.red}Health check failed:${colors.reset}`,
-    error.message,
-  );
+healthCheck().catch((error: unknown) => {
+  const message = error instanceof Error ? error.message : "Unknown error";
+  console.error(`${colors.red}Health check failed:${colors.reset}`, message);
   process.exit(1);
 });

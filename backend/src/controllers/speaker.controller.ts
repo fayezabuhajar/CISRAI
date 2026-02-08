@@ -3,6 +3,13 @@ import { speakerService } from "../services/speaker.service";
 import { successResponse, errorResponse } from "../utils/response";
 import { getPaginationParams, getPaginationMeta } from "../utils/pagination";
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+};
+
 export const speakerController = {
   async createSpeaker(req: Request, res: Response) {
     try {
@@ -11,10 +18,10 @@ export const speakerController = {
       res
         .status(201)
         .json(successResponse("Speaker created successfully", speaker, 201));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Creation failed", error.message, 400));
+        .json(errorResponse("Creation failed", getErrorMessage(error), 400));
     }
   },
 
@@ -34,10 +41,16 @@ export const speakerController = {
           meta: getPaginationMeta(total, page, limit),
         }),
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
-        .json(errorResponse("Error retrieving speakers", error.message, 500));
+        .json(
+          errorResponse(
+            "Error retrieving speakers",
+            getErrorMessage(error),
+            500,
+          ),
+        );
     }
   },
 
@@ -46,10 +59,10 @@ export const speakerController = {
       const speaker = await speakerService.getSpeakerById(req.params.id);
 
       res.status(200).json(successResponse("Speaker retrieved", speaker));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(404)
-        .json(errorResponse("Speaker not found", error.message, 404));
+        .json(errorResponse("Speaker not found", getErrorMessage(error), 404));
     }
   },
 
@@ -63,8 +76,10 @@ export const speakerController = {
       res
         .status(200)
         .json(successResponse("Speaker updated successfully", speaker));
-    } catch (error: any) {
-      res.status(400).json(errorResponse("Update failed", error.message, 400));
+    } catch (error: unknown) {
+      res
+        .status(400)
+        .json(errorResponse("Update failed", getErrorMessage(error), 400));
     }
   },
 
@@ -73,10 +88,10 @@ export const speakerController = {
       await speakerService.deleteSpeaker(req.params.id);
 
       res.status(200).json(successResponse("Speaker deleted successfully"));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Deletion failed", error.message, 400));
+        .json(errorResponse("Deletion failed", getErrorMessage(error), 400));
     }
   },
 
@@ -87,10 +102,12 @@ export const speakerController = {
       res
         .status(200)
         .json(successResponse("Speaker confirmed successfully", speaker));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Confirmation failed", error.message, 400));
+        .json(
+          errorResponse("Confirmation failed", getErrorMessage(error), 400),
+        );
     }
   },
 };

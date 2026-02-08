@@ -16,12 +16,12 @@ export interface IUser extends Document {
 
 export interface IParticipant extends Document {
   _id: string;
-  userId: string;
+  userId?: string;
   fullName: string;
   email: string;
   phone: string;
-  country: string;
-  affiliation: string;
+  country?: string;
+  affiliation?: string;
   registrationType: "onsite-paper" | "online-paper" | "attendance";
   paperTitle?: string;
   paperFile?: string;
@@ -41,14 +41,14 @@ export interface IParticipant extends Document {
 
 export interface IReviewer extends Document {
   _id: string;
-  userId: string;
+  userId?: string;
   fullName: string;
   email: string;
-  phone: string;
+  phone?: string;
   affiliation: string;
   expertise: string[];
-  experience: number;
-  bio: string;
+  experience?: number;
+  bio?: string;
   cv?: string;
   status: "pending" | "approved" | "rejected";
   approvedDate?: Date;
@@ -60,36 +60,61 @@ export interface IReviewer extends Document {
 
 export interface ISpeaker extends Document {
   _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  affiliation: string;
-  title: string;
-  bio: string;
+  name: {
+    en: string;
+    ar: string;
+  };
+  role: {
+    en: string;
+    ar: string;
+  };
+  title: {
+    en: string;
+    ar: string;
+  };
+  keynote: {
+    en: string;
+    ar: string;
+  };
+  affiliation: {
+    en: string;
+    ar: string;
+  };
+  bio?: {
+    en: string;
+    ar: string;
+  };
+  email?: string;
+  phone?: string;
   photo?: string;
   socialLinks?: {
     linkedin?: string;
     twitter?: string;
     website?: string;
   };
-  presentationTopic: string;
-  presentationDuration: number;
-  presentationFile?: string;
-  sessionId?: string;
-  status: "invited" | "confirmed" | "declined";
+  order: number;
+  status: "active" | "inactive";
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface ICommittee extends Document {
   _id: string;
-  name: string;
-  description: string;
-  members: {
-    userId: string;
-    role: string;
-  }[];
+  name: {
+    en: string;
+    ar: string;
+  };
+  committee: "scientific" | "preparatory" | "media" | "technical";
+  title: {
+    en: string;
+    ar: string;
+  };
+  affiliation?: {
+    en: string;
+    ar: string;
+  };
+  email?: string;
+  order: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -183,7 +208,7 @@ export interface IJWTPayload {
   exp?: number;
 }
 
-export interface IApiResponse<T = any> {
+export interface IApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;

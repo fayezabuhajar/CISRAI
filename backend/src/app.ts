@@ -8,6 +8,7 @@ import { env } from "./config/env";
 
 // Import Routes
 import authRoutes from "./routes/auth.routes";
+import adminRoutes from "./routes/admin.routes";
 import registrationRoutes from "./routes/registration.routes";
 import reviewerRoutes from "./routes/reviewer.routes";
 import speakerRoutes from "./routes/speaker.routes";
@@ -28,9 +29,38 @@ const app: Express = express();
 app.use(helmet());
 
 // CORS
+const allowedOrigins = env.CORS_ORIGIN.split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const localOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
 app.use(
   cors({
-    origin: env.CORS_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes("*")) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      if (env.isDev && localOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
     optionsSuccessStatus: 200,
   }),
@@ -61,6 +91,7 @@ app.get("/health", (req: Request, res: Response) => {
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/registration", registrationRoutes);
 app.use("/api/reviewers", reviewerRoutes);
 app.use("/api/speakers", speakerRoutes);

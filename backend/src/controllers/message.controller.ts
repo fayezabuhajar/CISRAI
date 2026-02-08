@@ -7,6 +7,13 @@ interface AuthenticatedRequest extends Request {
   user?: { id: string; email: string; role: string };
 }
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+};
+
 export const messageController = {
   async submitMessage(req: Request, res: Response) {
     try {
@@ -15,10 +22,10 @@ export const messageController = {
       res
         .status(201)
         .json(successResponse("Message submitted successfully", message, 201));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Submission failed", error.message, 400));
+        .json(errorResponse("Submission failed", getErrorMessage(error), 400));
     }
   },
 
@@ -40,10 +47,16 @@ export const messageController = {
           meta: getPaginationMeta(total, page, limit),
         }),
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(500)
-        .json(errorResponse("Error retrieving messages", error.message, 500));
+        .json(
+          errorResponse(
+            "Error retrieving messages",
+            getErrorMessage(error),
+            500,
+          ),
+        );
     }
   },
 
@@ -54,10 +67,10 @@ export const messageController = {
       await messageService.markAsRead(req.params.id);
 
       res.status(200).json(successResponse("Message retrieved", message));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(404)
-        .json(errorResponse("Message not found", error.message, 404));
+        .json(errorResponse("Message not found", getErrorMessage(error), 404));
     }
   },
 
@@ -71,8 +84,10 @@ export const messageController = {
       );
 
       res.status(200).json(successResponse("Reply sent successfully", message));
-    } catch (error: any) {
-      res.status(400).json(errorResponse("Reply failed", error.message, 400));
+    } catch (error: unknown) {
+      res
+        .status(400)
+        .json(errorResponse("Reply failed", getErrorMessage(error), 400));
     }
   },
 
@@ -81,10 +96,10 @@ export const messageController = {
       await messageService.deleteMessage(req.params.id);
 
       res.status(200).json(successResponse("Message deleted successfully"));
-    } catch (error: any) {
+    } catch (error: unknown) {
       res
         .status(400)
-        .json(errorResponse("Deletion failed", error.message, 400));
+        .json(errorResponse("Deletion failed", getErrorMessage(error), 400));
     }
   },
 };

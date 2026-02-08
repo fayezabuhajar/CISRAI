@@ -1,5 +1,10 @@
 import { Admin } from "../models/Admin";
+import { IAdmin } from "../types/index";
 import { generateToken } from "../utils/jwt";
+
+type AdminDocument = IAdmin & {
+  comparePassword: (password: string) => Promise<boolean>;
+};
 
 export const adminService = {
   async createAdmin(
@@ -35,7 +40,8 @@ export const adminService = {
       throw new Error("Admin not found");
     }
 
-    const isPasswordValid = await (admin as any).comparePassword(password);
+    const adminDocument = admin as unknown as AdminDocument;
+    const isPasswordValid = await adminDocument.comparePassword(password);
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
@@ -87,7 +93,7 @@ export const adminService = {
     return { admins, total, page, limit };
   },
 
-  async updateAdmin(id: string, data: any) {
+  async updateAdmin(id: string, data: Partial<IAdmin>) {
     const admin = await Admin.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,

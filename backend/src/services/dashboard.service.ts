@@ -8,6 +8,11 @@ import { Message } from "../models/Message";
 export const dashboardService = {
   async getOverviewStats() {
     const [
+      totalCommitteeMembers,
+      activeSpeakers,
+      paidParticipants,
+      pendingReviewers,
+      newMessages,
       totalParticipants,
       totalReviewers,
       totalSpeakers,
@@ -17,6 +22,11 @@ export const dashboardService = {
       onlineParticipants,
       onsiteParticipants,
     ] = await Promise.all([
+      Committee.countDocuments(),
+      Speaker.countDocuments({ status: "active" }),
+      Participant.countDocuments({ paymentStatus: "completed" }),
+      Reviewer.countDocuments({ status: "pending" }),
+      Message.countDocuments({ status: "unread" }),
       Participant.countDocuments(),
       Reviewer.countDocuments(),
       Speaker.countDocuments(),
@@ -28,6 +38,11 @@ export const dashboardService = {
     ]);
 
     return {
+      totalCommitteeMembers,
+      activeSpeakers,
+      paidParticipants,
+      pendingReviewers,
+      newMessages,
       totalParticipants,
       totalReviewers,
       totalSpeakers,

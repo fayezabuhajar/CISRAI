@@ -1,7 +1,8 @@
 import { Paper } from "../models/Paper";
+import { IPaper } from "../types/index";
 
 export const paperService = {
-  async submitPaper(data: any) {
+  async submitPaper(data: Partial<IPaper>) {
     const paper = new Paper({
       ...data,
       status: "submitted",

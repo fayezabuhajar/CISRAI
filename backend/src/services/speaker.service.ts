@@ -1,15 +1,19 @@
 import { Speaker } from "../models/Speaker";
+import { ISpeaker } from "../types/index";
 
 export const speakerService = {
-  async createSpeaker(data: any) {
-    const existingSpeaker = await Speaker.findOne({ email: data.email });
-    if (existingSpeaker) {
-      throw new Error("Speaker already exists");
+  async createSpeaker(data: Partial<ISpeaker>) {
+    // Only check for existing speaker if email is provided
+    if (data.email) {
+      const existingSpeaker = await Speaker.findOne({ email: data.email });
+      if (existingSpeaker) {
+        throw new Error("Speaker already exists");
+      }
     }
 
     const speaker = new Speaker({
       ...data,
-      status: "invited",
+      status: data.status || "active",
     });
 
     await speaker.save();
@@ -34,7 +38,7 @@ export const speakerService = {
     return speaker;
   },
 
-  async updateSpeaker(id: string, data: any) {
+  async updateSpeaker(id: string, data: Partial<ISpeaker>) {
     const speaker = await Speaker.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
@@ -58,7 +62,7 @@ export const speakerService = {
   async confirmSpeaker(id: string) {
     const speaker = await Speaker.findByIdAndUpdate(
       id,
-      { status: "confirmed" },
+      { status: "active" },
       { new: true },
     );
 

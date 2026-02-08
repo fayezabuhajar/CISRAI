@@ -1,8 +1,9 @@
 import { Reviewer } from "../models/Reviewer";
 import { sendReviewerInvitationEmail } from "../utils/email";
+import { IReviewer } from "../types/index";
 
 export const reviewerService = {
-  async createReviewerRequest(data: any) {
+  async createReviewerRequest(data: Partial<IReviewer>) {
     const existingReviewer = await Reviewer.findOne({ email: data.email });
     if (existingReviewer) {
       throw new Error("Reviewer already exists");
@@ -30,8 +31,12 @@ export const reviewerService = {
     if (!reviewer) {
       throw new Error("Reviewer not found");
     }
-
-    await sendReviewerInvitationEmail(reviewer.email, reviewer.fullName);
+    // Send email but don't fail the approval if email sending fails
+    try {
+      await sendReviewerInvitationEmail(reviewer.email, reviewer.fullName);
+    } catch (error) {
+      console.error("Failed to send reviewer invitation email", error);
+    }
     return reviewer;
   },
 
@@ -70,7 +75,7 @@ export const reviewerService = {
     return reviewer;
   },
 
-  async updateReviewer(id: string, data: any) {
+  async updateReviewer(id: string, data: Partial<IReviewer>) {
     const reviewer = await Reviewer.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,

@@ -8,9 +8,12 @@ export const handleValidationErrors = (
 ): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    const firstError = errors.array()[0];
+    // Log validation errors for debugging bad request responses
+    console.log("Validation errors:", errors.array());
     res.status(400).json({
       success: false,
-      message: "Validation error",
+      message: firstError?.msg || "Validation error",
       errors: errors.array(),
     });
     return;

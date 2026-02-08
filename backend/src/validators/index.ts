@@ -19,14 +19,13 @@ export const loginValidator = (): ValidationChain[] => [
 export const createParticipantValidator = (): ValidationChain[] => [
   body("fullName").trim().notEmpty(),
   body("email").isEmail().normalizeEmail(),
-  body("phone").isMobilePhone("any"),
-  body("country").notEmpty(),
+  body("phone").isMobilePhone("any", { strictMode: false }),
   body("registrationType").isIn(["onsite-paper", "online-paper", "attendance"]),
 ];
 
 export const updateParticipantValidator = (): ValidationChain[] => [
   body("fullName").optional().trim().notEmpty(),
-  body("phone").optional().isMobilePhone("any"),
+  body("phone").optional().isMobilePhone("any", { strictMode: false }),
   body("dietaryRequirements").optional().trim(),
 ];
 
@@ -34,24 +33,46 @@ export const updateParticipantValidator = (): ValidationChain[] => [
 export const createReviewerValidator = (): ValidationChain[] => [
   body("fullName").trim().notEmpty(),
   body("email").isEmail().normalizeEmail(),
-  body("phone").isMobilePhone("any"),
   body("affiliation").trim().notEmpty(),
-  body("expertise").isArray(),
-  body("experience").isInt({ min: 0 }),
-  body("bio").trim().notEmpty(),
+  body("expertise").isArray({ min: 1 }),
+  body("cv").optional().isString(),
 ];
 
 // Speaker Validators
 export const createSpeakerValidator = (): ValidationChain[] => [
-  body("firstName").trim().notEmpty(),
-  body("lastName").trim().notEmpty(),
-  body("email").isEmail().normalizeEmail(),
-  body("phone").isMobilePhone("any"),
-  body("affiliation").trim().notEmpty(),
-  body("title").trim().notEmpty(),
-  body("bio").trim().notEmpty(),
-  body("presentationTopic").trim().notEmpty(),
-  body("presentationDuration").isInt({ min: 1 }),
+  body("name.en").trim().notEmpty(),
+  body("name.ar").trim().notEmpty(),
+  body("role.en").trim().notEmpty(),
+  body("role.ar").trim().notEmpty(),
+  body("title.en").trim().notEmpty(),
+  body("title.ar").trim().notEmpty(),
+  body("keynote.en").trim().notEmpty(),
+  body("keynote.ar").trim().notEmpty(),
+  body("affiliation.en").optional().trim(),
+  body("affiliation.ar").optional().trim(),
+  body("bio.en").optional().trim(),
+  body("bio.ar").optional().trim(),
+  body("email").optional().isEmail().normalizeEmail(),
+  body("phone").optional().isMobilePhone("any", { strictMode: false }),
+  body("order").optional().isInt({ min: 0 }),
+];
+
+export const updateSpeakerValidator = (): ValidationChain[] => [
+  body("name.en").optional().trim().notEmpty(),
+  body("name.ar").optional().trim().notEmpty(),
+  body("role.en").optional().trim().notEmpty(),
+  body("role.ar").optional().trim().notEmpty(),
+  body("title.en").optional().trim().notEmpty(),
+  body("title.ar").optional().trim().notEmpty(),
+  body("keynote.en").optional().trim().notEmpty(),
+  body("keynote.ar").optional().trim().notEmpty(),
+  body("affiliation.en").optional().trim(),
+  body("affiliation.ar").optional().trim(),
+  body("bio.en").optional().trim(),
+  body("bio.ar").optional().trim(),
+  body("email").optional().isEmail().normalizeEmail(),
+  body("phone").optional().isMobilePhone("any", { strictMode: false }),
+  body("order").optional().isInt({ min: 0 }),
 ];
 
 // Paper Validators
@@ -68,6 +89,33 @@ export const submitMessageValidator = (): ValidationChain[] => [
   body("senderEmail").isEmail().normalizeEmail(),
   body("subject").trim().notEmpty(),
   body("message").trim().notEmpty(),
+];
+
+// Committee Validators
+export const createCommitteeValidator = (): ValidationChain[] => [
+  body("name.en").trim().notEmpty(),
+  body("name.ar").trim().notEmpty(),
+  body("committee").isIn(["scientific", "preparatory", "media", "technical"]),
+  body("title.en").trim().notEmpty(),
+  body("title.ar").trim().notEmpty(),
+  body("affiliation.en").optional().trim(),
+  body("affiliation.ar").optional().trim(),
+  body("email").optional().isEmail().normalizeEmail(),
+  body("order").optional().isInt({ min: 0 }),
+];
+
+export const updateCommitteeValidator = (): ValidationChain[] => [
+  body("name.en").optional().trim().notEmpty(),
+  body("name.ar").optional().trim().notEmpty(),
+  body("committee")
+    .optional()
+    .isIn(["scientific", "preparatory", "media", "technical"]),
+  body("title.en").optional().trim().notEmpty(),
+  body("title.ar").optional().trim().notEmpty(),
+  body("affiliation.en").optional().trim(),
+  body("affiliation.ar").optional().trim(),
+  body("email").optional().isEmail().normalizeEmail(),
+  body("order").optional().isInt({ min: 0 }),
 ];
 
 // Schedule Validators

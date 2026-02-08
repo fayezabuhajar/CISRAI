@@ -1,7 +1,9 @@
+import { FilterQuery } from "mongoose";
 import { Announcement } from "../models/Announcement";
+import { IAnnouncementDocument } from "../types/index";
 
 export const announcementService = {
-  async createAnnouncement(data: any) {
+  async createAnnouncement(data: Partial<IAnnouncementDocument>) {
     const announcement = new Announcement({
       ...data,
       isPublished: true,
@@ -13,7 +15,7 @@ export const announcementService = {
 
   async getAllAnnouncements(page: number, limit: number, audience?: string) {
     const skip = (page - 1) * limit;
-    const query: any = { isPublished: true };
+    const query: FilterQuery<IAnnouncementDocument> = { isPublished: true };
 
     if (audience && audience !== "all") {
       query.targetAudience = { $in: ["all", audience] };
@@ -42,7 +44,7 @@ export const announcementService = {
     return announcement;
   },
 
-  async updateAnnouncement(id: string, data: any) {
+  async updateAnnouncement(id: string, data: Partial<IAnnouncementDocument>) {
     const announcement = await Announcement.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,

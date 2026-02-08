@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { IJWTPayload } from "../types/index";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: IJWTPayload;
 }
 

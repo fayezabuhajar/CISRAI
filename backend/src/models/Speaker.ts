@@ -3,38 +3,84 @@ import { ISpeaker } from "../types/index";
 
 const speakerSchema = new Schema<ISpeaker>(
   {
-    firstName: {
-      type: String,
-      required: true,
-      trim: true,
+    name: {
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+      },
     },
-    lastName: {
-      type: String,
-      required: true,
-      trim: true,
+    role: {
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+    },
+    title: {
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+    },
+    keynote: {
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+    },
+    affiliation: {
+      en: {
+        type: String,
+        required: false,
+        trim: true,
+      },
+      ar: {
+        type: String,
+        required: false,
+        trim: true,
+      },
+    },
+    bio: {
+      en: {
+        type: String,
+        trim: true,
+      },
+      ar: {
+        type: String,
+        trim: true,
+      },
     },
     email: {
       type: String,
-      required: true,
+      trim: true,
       lowercase: true,
-      unique: true,
     },
     phone: {
       type: String,
-      required: true,
-    },
-    affiliation: {
-      type: String,
-      required: true,
       trim: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    bio: {
-      type: String,
-      required: true,
     },
     photo: String,
     socialLinks: {
@@ -42,26 +88,19 @@ const speakerSchema = new Schema<ISpeaker>(
       twitter: String,
       website: String,
     },
-    presentationTopic: {
-      type: String,
-      required: true,
-    },
-    presentationDuration: {
+    order: {
       type: Number,
-      required: true,
-    },
-    presentationFile: String,
-    sessionId: {
-      type: Schema.Types.ObjectId,
-      ref: "Schedule",
+      default: 0,
     },
     status: {
       type: String,
-      enum: ["invited", "confirmed", "declined"],
-      default: "invited",
+      enum: ["active", "inactive"],
+      default: "active",
     },
   },
   { timestamps: true },
 );
+
+speakerSchema.index({ order: 1 });
 
 export const Speaker = mongoose.model<ISpeaker>("Speaker", speakerSchema);
