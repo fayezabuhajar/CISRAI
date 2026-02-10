@@ -14,6 +14,7 @@ interface VenueProps {
 
 export default function Venue({ language }: VenueProps) {
   const isRtl = language === "ar";
+  const mapUrl = "https://maps.app.goo.gl/EvfuXJJCKszZdu3e9";
 
   const t = {
     en: {
@@ -44,7 +45,7 @@ export default function Venue({ language }: VenueProps) {
     { en: "Main Conference Auditoriums", ar: "قاعات المؤتمرات الرئيسية" },
     { en: "Modern Research Labs", ar: "مختبرات بحثية حديثة" },
     { en: "High-speed Academic Network", ar: "شبكة أكاديمية عالية السرعة" },
-    { en: "On-campus Prayer Rooms", ar: "مصليات داخل الحرم الجامعي" },
+    { en: "A Mosque within the University Campus", ar: "مسجد داخل الحرم الجامعي" },
     { en: "Scientific Exhibition Areas", ar: "مساحات للمعارض العلمية" },
     { en: "Catering & Dining Facilities", ar: "مرافق الإطعام والضيافة" },
   ];
@@ -123,7 +124,12 @@ export default function Venue({ language }: VenueProps) {
                 <div className="font-bold text-primary">info@aau.edu.jo</div>
               </div>
             </div>
-            <button className="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl shadow-primary/20 hover:bg-accent group active:scale-95">
+            <a
+              href={mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl shadow-primary/20 hover:bg-accent group active:scale-95"
+            >
               <Navigation
                 size={20}
                 className="group-hover:translate-x-1 transition-transform"
@@ -131,7 +137,7 @@ export default function Venue({ language }: VenueProps) {
               <span>
                 {isRtl ? "عرض الموقع على الخريطة" : "View on Google Maps"}
               </span>
-            </button>
+            </a>
           </div>
         </div>
 
@@ -210,8 +216,8 @@ export default function Venue({ language }: VenueProps) {
                   </h3>
                   <p className="text-secondary/60 text-sm">
                     {isRtl
-                      ? "من الأحد إلى الخميس: 08:00 - 16:00"
-                      : "Sun - Thu: 08:00 AM - 04:00 PM"}
+                      ? "من السبت إلى الخميس: 08:30 - 16:00"
+                      : "Sat - Thu: 08:30 AM - 04:00 PM"}
                   </p>
                 </div>
               </div>
