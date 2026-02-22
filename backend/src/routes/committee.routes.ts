@@ -4,10 +4,10 @@ import { adminAuthMiddleware } from "../middleware/auth";
 import { successResponse, errorResponse } from "../utils/response";
 import { getPaginationMeta } from "../utils/pagination";
 import { Request, Response } from "express";
+import { DEFAULT_COMMITTEES } from "../constants/defaultCommittees";
 import {
   createCommitteeValidator,
   updateCommitteeValidator,
-  idValidator,
 } from "../validators/index";
 import { handleValidationErrors } from "../middleware/validationHandler";
 
@@ -20,6 +20,7 @@ const getErrorMessage = (error: unknown) => {
   return String(error);
 };
 
+// POST - إضافة لجنة جديدة
 router.post(
   "/",
   adminAuthMiddleware,
@@ -40,6 +41,7 @@ router.post(
   },
 );
 
+// GET - جلب جميع اللجان (من DB، أو الافتراضية إذا كانت DB فارغة)
 router.get("/", async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
@@ -49,7 +51,8 @@ router.get("/", async (req: Request, res: Response) => {
 
     const filter = committeeType ? { committee: committeeType } : {};
 
-    const [committees, total] = await Promise.all([
+    // محاولة جلب من قاعدة البيانات
+    const [committeesFromDB, total] = await Promise.all([
       Committee.find(filter)
         .sort({ committee: 1, order: 1 })
         .skip(skip)
@@ -57,9 +60,28 @@ router.get("/", async (req: Request, res: Response) => {
       Committee.countDocuments(filter),
     ]);
 
+    // إذا كانت قاعدة البيانات فارغة، استخدم اللجان الافتراضية
+    if (total === 0) {
+      let committees = DEFAULT_COMMITTEES;
+
+      if (committeeType) {
+        committees = committees.filter((c) => c.committee === committeeType);
+      }
+
+      const defaultTotal = committees.length;
+      const paginatedCommittees = committees.slice(skip, skip + limit);
+
+      return res.status(200).json(
+        successResponse("Committees retrieved (default)", {
+          data: paginatedCommittees,
+          meta: getPaginationMeta(defaultTotal, page, limit),
+        }),
+      );
+    }
+
     res.status(200).json(
       successResponse("Committees retrieved", {
-        data: committees,
+        data: committeesFromDB,
         meta: getPaginationMeta(total, page, limit),
       }),
     );
@@ -76,14 +98,29 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
+// GET - جلب لجنة واحدة بالـ ID
 router.get("/:id", async (req: Request, res: Response) => {
   try {
+    // محاولة الجلب من قاعدة البيانات
     const committee = await Committee.findById(req.params.id);
+
+    // إذا لم توجد في DB، ابحث في اللجان الافتراضية
     if (!committee) {
+      const defaultCommittee = DEFAULT_COMMITTEES.find(
+        (c) => c._id === req.params.id,
+      );
+      if (!defaultCommittee) {
+        return res
+          .status(404)
+          .json(errorResponse("Committee not found", "", 404));
+      }
       return res
-        .status(404)
-        .json(errorResponse("Committee not found", "", 404));
+        .status(200)
+        .json(
+          successResponse("Committee retrieved (default)", defaultCommittee),
+        );
     }
+
     res.status(200).json(successResponse("Committee retrieved", committee));
   } catch (error: unknown) {
     res
@@ -98,6 +135,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+// PUT - تعديل لجنة موجودة
 router.put(
   "/:id",
   adminAuthMiddleware,
@@ -127,6 +165,7 @@ router.put(
   },
 );
 
+// DELETE - حذف لجنة
 router.delete(
   "/:id",
   adminAuthMiddleware,

@@ -11,6 +11,7 @@
     "test:mongodb": "ts-node test-mongodb.ts",
     "seed": "ts-node ./seed.ts",
     "seed:dev": "nodemon --exec ts-node ./seed.ts",
+    "seed:committees": "ts-node ./seed-committees.ts",
     "init-settings": "ts-node ./src/init-settings.ts"
   },
   "dependencies": {
