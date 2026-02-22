@@ -35,9 +35,10 @@ export const env = {
   CORS_ORIGIN: process.env.CORS_ORIGIN || "http://localhost:5173",
 
   // Rate Limiting
-  RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"),
+  RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"), // 15 minutes
   RATE_LIMIT_MAX_REQUESTS: parseInt(
-    process.env.RATE_LIMIT_MAX_REQUESTS || "100",
+    process.env.RATE_LIMIT_MAX_REQUESTS ||
+      (process.env.NODE_ENV === "development" ? "500" : "100"), // More relaxed in development
   ),
 
   isDev: process.env.NODE_ENV === "development",

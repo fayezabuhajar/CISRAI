@@ -3,8 +3,8 @@
  * Handles all communication with the backend
  */
 
-// Default to port 5001 to match the running backend; VITE_API_URL can override.
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
+// Default to port 5000 to match the running backend; VITE_API_URL can override.
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 // Storage keys
 const TOKEN_KEY = "auth_token";
@@ -489,5 +489,46 @@ export const dashboardAPI = {
 
   getPaperStats: async () => {
     return apiRequest("/dashboard/stats/papers", "GET");
+  },
+};
+
+export const settingsAPI = {
+  getVenue: async () => {
+    return apiRequest("/settings/venue", "GET", undefined, false);
+  },
+
+  getSettings: async () => {
+    return apiRequest("/settings", "GET");
+  },
+
+  updateVenue: async (data: Record<string, unknown>) => {
+    return apiRequest("/settings/venue", "PUT", data);
+  },
+
+  getImportantDates: async () => {
+    return apiRequest("/settings/important-dates", "GET", undefined, false);
+  },
+
+  updateImportantDates: async (data: unknown[]) => {
+    return apiRequest("/settings/important-dates", "PUT", data);
+  },
+
+  getPatronName: async () => {
+    return apiRequest("/settings/patron-name", "GET", undefined, false);
+  },
+
+  updatePatronName: async (data: {
+    patronNameEn?: string;
+    patronNameAr?: string;
+  }) => {
+    return apiRequest("/settings/patron-name", "PUT", data);
+  },
+
+  getSponsors: async () => {
+    return apiRequest("/settings/sponsors", "GET", undefined, false);
+  },
+
+  updateSponsors: async (data: unknown[]) => {
+    return apiRequest("/settings/sponsors", "PUT", data);
   },
 };

@@ -7,8 +7,7 @@ import {
   Mail,
   LayoutDashboard,
   LogOut,
-  Menu,
-  X,
+  Settings,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import CommitteesManagement from "../admin/CommitteesManagement";
@@ -17,6 +16,7 @@ import ParticipantsManagement from "../admin/ParticipantsManagement";
 import ReviewersManagement from "../admin/ReviewersManagement";
 import MessagesManagement from "../admin/MessagesManagement";
 import DashboardOverview from "../admin/DashboardOverview";
+import SettingsManagement from "../admin/SettingsManagement";
 
 interface AdminDashboardProps {
   language: "en" | "ar";
@@ -29,7 +29,8 @@ export type ActiveSection =
   | "speakers"
   | "participants"
   | "reviewers"
-  | "messages";
+  | "messages"
+  | "settings";
 
 export default function AdminDashboard({
   language,
@@ -48,6 +49,7 @@ export default function AdminDashboard({
       participants: "Participants",
       reviewers: "Reviewer Requests",
       messages: "Contact Messages",
+      settings: "Settings",
       back: "Back to Overview",
       logout: "Logout",
     },
@@ -59,6 +61,7 @@ export default function AdminDashboard({
       participants: "المشاركون",
       reviewers: "طلبات التحكيم",
       messages: "الرسائل",
+      settings: "الإعدادات",
       back: "عودة للنظرة العامة",
       logout: "تسجيل الخروج",
     },
@@ -79,6 +82,7 @@ export default function AdminDashboard({
     },
     { id: "reviewers" as ActiveSection, label: t.reviewers, icon: FileText },
     { id: "messages" as ActiveSection, label: t.messages, icon: Mail },
+    { id: "settings" as ActiveSection, label: t.settings, icon: Settings },
   ];
 
   const renderContent = () => {
@@ -100,6 +104,8 @@ export default function AdminDashboard({
         return <ReviewersManagement language={language} />;
       case "messages":
         return <MessagesManagement language={language} />;
+      case "settings":
+        return <SettingsManagement language={language} />;
       default:
         return <DashboardOverview language={language} />;
     }
@@ -111,12 +117,7 @@ export default function AdminDashboard({
       dir={isRtl ? "rtl" : "ltr"}
     >
       {/* Mobile Menu Toggle */}
-      <button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 bg-primary text-white p-3 rounded-xl shadow-lg"
-      >
-        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      
 
       {/* Mobile Backdrop */}
       <AnimatePresence>

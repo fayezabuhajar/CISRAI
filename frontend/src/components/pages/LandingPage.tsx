@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { DomeTrackCard } from "../DomeTrackCard";
+import { settingsAPI } from "../../services/api";
 
 interface LandingPageProps {
   language: "en" | "ar";
@@ -25,6 +26,97 @@ export default function LandingPage({ language }: LandingPageProps) {
     minutes: 0,
     seconds: 0,
   });
+
+  const [venueName, setVenueName] = useState({
+    en: "Amman Arab University",
+    ar: "جامعة عمان العربية",
+  });
+
+  const [conferenceDate, setConferenceDate] = useState("8–9 June 2026");
+  const [patronName, setPatronName] = useState({
+    en: "Prof. Dr. Ismail Yamin",
+    ar: "الأستاذ الدكتور إسماعيل يامين",
+  });
+
+  interface Sponsor {
+    nameEn: string;
+    nameAr: string;
+    logoUrl: string;
+    websiteUrl?: string;
+    order: number;
+  }
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      try {
+        const response = (await settingsAPI.getVenue()) as {
+          success: boolean;
+          data: { nameEn: string; nameAr: string };
+        };
+        if (response.success && response.data) {
+          setVenueName({
+            en: response.data.nameEn,
+            ar: response.data.nameAr,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching venue data:", error);
+      }
+    };
+
+    const fetchConferenceDate = async () => {
+      try {
+        const response = (await settingsAPI.getImportantDates()) as {
+          success: boolean;
+          data: Array<{ date: string; highlight: boolean }>;
+        };
+        if (response.success && response.data) {
+          const highlightedDate = response.data.find((d) => d.highlight);
+          if (highlightedDate) {
+            setConferenceDate(highlightedDate.date);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching conference date:", error);
+      }
+    };
+
+    const fetchPatronName = async () => {
+      try {
+        const response = (await settingsAPI.getPatronName()) as {
+          success: boolean;
+          data: { patronNameEn: string; patronNameAr: string };
+        };
+        if (response.success && response.data) {
+          setPatronName({
+            en: response.data.patronNameEn,
+            ar: response.data.patronNameAr,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching patron name:", error);
+      }
+    };
+
+    const fetchSponsors = async () => {
+      try {
+        const response = (await settingsAPI.getSponsors()) as {
+          success: boolean;
+          data: Sponsor[];
+        };
+        if (response.success && response.data) {
+          setSponsors(response.data.sort((a, b) => a.order - b.order));
+        }
+      } catch (error) {
+        console.error("Error fetching sponsors:", error);
+      }
+    };
+
+    fetchVenueData();
+    fetchConferenceDate();
+    fetchPatronName();
+    fetchSponsors();
+  }, []);
 
   useEffect(() => {
     const targetDate = new Date("2026-06-08T09:00:00").getTime();
@@ -50,18 +142,17 @@ export default function LandingPage({ language }: LandingPageProps) {
 
   const content = {
     en: {
-      patronage: "Under the patronage of His Excellency Prof. Dr. Ismail Yamin",
+      patronage: `Under the patronage of His Excellency ${patronName.en}`,
       organizedBy:
-        "Organized by: Faculty of Sharia & Deanship of Scientific Research",
+        "Organized by: Faculty of Sharia & Deanship of Scientific Research and Postgraduate Studies",
       title:
         "The Reality of Curricula in Islamic Sciences and Scientific Research",
       subtitle: "In Light of Artificial Intelligence",
       description:
         "A global gathering of scholars and researchers to explore the intersection of traditional Islamic academia and cutting-edge digital transformation.",
-      president: "Conference President: Prof. Dr. Ismail Yamin",
-      chair: "Committee Chair: Dr. Kifah Al-Souri",
-      date: "8–9 June 2026",
-      venue: "Amman Arab University",
+      president: `Conference President: ${patronName.en}`,
+      chair: "Scientific Committee Chair: Dr. Kifah Al-Souri",
+      date: conferenceDate,
       mode: "On-site and Online",
       register: "Register Now",
       callForPapers: "Submit Your Paper",
@@ -88,18 +179,20 @@ export default function LandingPage({ language }: LandingPageProps) {
         "Explore the key research areas and thematic focuses of the conference",
       readMore: "Read More",
       closeModal: "Close",
+      sponsorsTitle: "Our Sponsors",
+      sponsorsSubtitle:
+        "Thanks to our valued partners supporting this conference",
     },
     ar: {
-      patronage: "تحت رعاية الأستاذ الدكتور إسماعيل يامين المحترم",
+      patronage: `تحت رعاية ${patronName.ar} المحترم`,
       organizedBy: "تنظيم: كلية الشريعة وعمادة البحث العلمي والدراسات العليا",
       title: "واقع المناهج الدراسية في العلوم الشرعية والبحث العلمي",
       subtitle: "في ظل الذكاء الاصطناعي",
       description:
         "تجمع عالمي للعلماء والباحثين لاستكشاف التقاطع بين الأكاديمية الإسلامية التقليدية والتحول الرقمي المتطور.",
-      president: "رئيس المؤتمر: الأستاذ الدكتور إسماعيل يامين",
-      chair: "رئيس اللجنة التحضيرية: الدكتور كفاح الصوري",
-      date: "8–9 يونيو 2026",
-      venue: "جامعة عمان العربية",
+      president: `رئيس المؤتمر: ${patronName.ar}`,
+      chair: "رئيس اللجنة العلمية: الدكتور كفاح الصوري",
+      date: conferenceDate,
       mode: "حضورياً وعبر الإنترنت",
       register: "سجل الآن",
       callForPapers: "قدم ورقتك البحثية",
@@ -123,6 +216,8 @@ export default function LandingPage({ language }: LandingPageProps) {
         "استكشف المجالات البحثية والمحاور الموضوعية الرئيسية للمؤتمر",
       readMore: "اقرأ المزيد",
       closeModal: "إغلاق",
+      sponsorsTitle: "رعاة المؤتمر",
+      sponsorsSubtitle: "شكراً لشركائنا الداعمين لهذا المؤتمر",
     },
   };
 
@@ -280,7 +375,7 @@ export default function LandingPage({ language }: LandingPageProps) {
                     {isRtl ? "المكان" : "Location"}
                   </div>
                   <div className="text-lg font-bold text-[#333333]">
-                    {t.venue}
+                    {isRtl ? venueName.ar : venueName.en}
                   </div>
                 </div>
               </div>
@@ -325,7 +420,7 @@ export default function LandingPage({ language }: LandingPageProps) {
             <div className="h-px bg-[#333333]/10" />
             <div>
               <div className="text-xs text-[#333333]/50 uppercase">
-                {isRtl ? "رئيس اللجنة التحضيرية" : "Committee Chair"}
+                {isRtl ? "رئيس اللجنة العلمية" : "Scientific Committee Chair"}
               </div>
               <div className="font-medium text-lg">
                 {isRtl ? "د. كفاح الصوري" : "Dr. Kifah Al-Souri"}
@@ -377,7 +472,9 @@ export default function LandingPage({ language }: LandingPageProps) {
             </div>
             <div className="w-2 h-2 rounded-full bg-accent/30" />
             <div className="text-xl font-bold text-primary">
-              {isRtl ? "عمادة البحث العلمي" : "Deanship of Scientific Research"}
+              {isRtl
+                ? "عمادة البحث العلمي والدراسات العليا"
+                : "Deanship of Scientific Research and Postgraduate Studies"}
             </div>
             <div className="w-2 h-2 rounded-full bg-accent/30" />
             <div className="text-xl font-bold text-primary">
@@ -516,6 +613,91 @@ export default function LandingPage({ language }: LandingPageProps) {
           </div>
         </div>
       </section>
+
+      {/* Sponsors Section */}
+      {sponsors.length > 0 && (
+        <section className="py-20 px-6 md:px-12 bg-gradient-to-br from-neutral-50 via-white to-accent/5 relative overflow-hidden">
+          {/* Decorative Pattern Background */}
+          <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `radial-gradient(circle at 2px 2px, rgba(26, 48, 94, 0.15) 1px, transparent 0)`,
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
+
+          {/* Decorative Shapes */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-10 left-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
+            <div className="absolute top-1/4 right-20 w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-secondary/5 rounded-full blur-2xl" />
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            {/* Section Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+                {t.sponsorsTitle}
+              </h2>
+              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+                {t.sponsorsSubtitle}
+              </p>
+            </motion.div>
+
+            {/* Sponsors Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {sponsors.map((sponsor, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="group"
+                >
+                  <a
+                    href={sponsor.websiteUrl || "#"}
+                    target={sponsor.websiteUrl ? "_blank" : undefined}
+                    rel={sponsor.websiteUrl ? "noopener noreferrer" : undefined}
+                    className={`block bg-white backdrop-blur-sm rounded-2xl p-6 border border-neutral-200/60 hover:border-primary/50 hover:bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                      sponsor.websiteUrl ? "cursor-pointer" : "cursor-default"
+                    }`}
+                  >
+                    <div className="aspect-square flex items-center justify-center">
+                      {sponsor.logoUrl ? (
+                        <img
+                          src={sponsor.logoUrl}
+                          alt={
+                            language === "ar" ? sponsor.nameAr : sponsor.nameEn
+                          }
+                          className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-neutral-50 rounded-xl">
+                          <Users size={48} className="text-neutral-300" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 text-center">
+                      <h3 className="font-bold text-primary text-sm">
+                        {language === "ar" ? sponsor.nameAr : sponsor.nameEn}
+                      </h3>
+                    </div>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Track Details Modal */}
       <AnimatePresence>

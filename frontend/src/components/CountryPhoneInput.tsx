@@ -139,12 +139,12 @@ export function CountryPhoneInput({
     <div className="relative">
       <div className="flex gap-2">
         {/* Country Selector */}
-        <div className="relative">
+        <div className="relative shrink-0">
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             disabled={disabled}
-            className="h-[46px] px-3 rounded-xl border border-emerald-100 bg-white hover:bg-emerald-50 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="h-[46px] px-3 rounded-xl border border-emerald-100 bg-white hover:bg-emerald-50 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed min-w-[130px]"
           >
             <span className="text-2xl">{selectedCountry.flag}</span>
             <span className="text-sm font-medium text-emerald-900">
@@ -225,7 +225,7 @@ export function CountryPhoneInput({
         </div>
 
         {/* Phone Number Input */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative min-w-0">
           <Phone
             className={`absolute ${isRtl ? "right-4" : "left-4"} top-3.5 text-emerald-600`}
             size={18}
@@ -241,7 +241,7 @@ export function CountryPhoneInput({
             placeholder={isRtl ? "رقم الهاتف" : "Phone number"}
             disabled={disabled}
             required={required}
-            className={`w-full ${isRtl ? "pr-12 pl-4" : "pl-12 pr-4"} py-3 rounded-xl border border-emerald-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed`}
+            className={`w-full ${isRtl ? "pr-12 pl-4 text-right" : "pl-12 pr-4"} py-3 rounded-xl border border-emerald-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed font-mono text-base`}
           />
         </div>
       </div>

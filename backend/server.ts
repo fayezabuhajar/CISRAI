@@ -9,10 +9,12 @@ const requireModule = async (path: string) => {
     const connectDB = await requireModule("./src/config/database");
     const { env } = await import("./src/config/env");
 
-    // Connect to Database
-    await connectDB();
+    // Try to connect to Database (non-blocking)
+    connectDB().catch((error: Error) => {
+      console.error("Database connection will retry in background");
+    });
 
-    // Start Server
+    // Start Server immediately
     app.listen(env.PORT, () => {
       console.log(`
 ╔════════════════════════════════════╗

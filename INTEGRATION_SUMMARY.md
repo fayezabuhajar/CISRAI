@@ -339,7 +339,7 @@ VITE_API_URL=https://your-api-domain.com/api
 
 ```
 PORT=5000
-MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/db
+MONGO_URI=
 JWT_SECRET=long-random-secure-string
 NODE_ENV=production
 ```

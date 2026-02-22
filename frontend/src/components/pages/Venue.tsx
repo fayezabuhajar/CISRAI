@@ -5,50 +5,127 @@ import {
   Car,
   Plane,
   ShieldCheck,
+  Loader,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { settingsAPI } from "../../services/api";
 
 interface VenueProps {
   language: "en" | "ar";
 }
 
+interface VenueFeature {
+  en: string;
+  ar: string;
+}
+
+interface VenueData {
+  nameEn: string;
+  nameAr: string;
+  addressEn: string;
+  addressAr: string;
+  aboutEn: string;
+  aboutAr: string;
+  phone: string;
+  email: string;
+  mapUrl: string;
+  features: VenueFeature[];
+}
+
 export default function Venue({ language }: VenueProps) {
   const isRtl = language === "ar";
-  const mapUrl = "https://maps.app.goo.gl/EvfuXJJCKszZdu3e9";
+  const [venueData, setVenueData] = useState<VenueData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      try {
+        const response = (await settingsAPI.getVenue()) as {
+          success: boolean;
+          data: VenueData;
+        };
+        if (response.success && response.data) {
+          setVenueData(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching venue data:", error);
+        // Set default values if API fails
+        setVenueData({
+          nameEn: "Amman Arab University",
+          nameAr: "جامعة عمان العربية",
+          addressEn: "Jordan Street, Mobis, Amman, Jordan",
+          addressAr: "شارع الأردن، موبص، عمان، الأردن",
+          aboutEn:
+            "Amman Arab University (AAU) is a leading institution in Jordan, committed to academic excellence and scientific research. The campus provides a modern and inspiring environment for scholars to share knowledge and foster innovation in Islamic sciences.",
+          aboutAr:
+            "تعد جامعة عمان العربية مؤسسة رائدة في الأردن، ملتزمة بالتميز الأكاديمي والبحث العلمي. يوفر الحرم الجامعي بيئة حديثة وملهمة للعلماء لتبادل المعرفة وتعزيز الابتكار في العلوم الشرعية.",
+          phone: "+962 6 4790222",
+          email: "info@aau.edu.jo",
+          mapUrl: "https://maps.app.goo.gl/EvfuXJJCKszZdu3e9",
+          features: [
+            {
+              en: "Main Conference Auditoriums",
+              ar: "قاعات المؤتمرات الرئيسية",
+            },
+            { en: "Modern Research Labs", ar: "مختبرات بحثية حديثة" },
+            {
+              en: "High-speed Academic Network",
+              ar: "شبكة أكاديمية عالية السرعة",
+            },
+            {
+              en: "A Mosque within the University Campus",
+              ar: "مسجد داخل الحرم الجاسعي",
+            },
+            { en: "Scientific Exhibition Areas", ar: "مساحات للمعارض العلمية" },
+            {
+              en: "Catering & Dining Facilities",
+              ar: "مرافق الإطعام والضيافة",
+            },
+          ],
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVenueData();
+  }, []);
 
   const t = {
     en: {
       title: "Conference Venue",
       subtitle: "Join us at the prestigious Amman Arab University campus.",
-      venueName: "Amman Arab University",
-      address: "Jordan Street, Mobis, Amman, Jordan",
-      aboutVenue: "About Amman Arab University",
-      aboutText:
-        "Amman Arab University (AAU) is a leading institution in Jordan, committed to academic excellence and scientific research. The campus provides a modern and inspiring environment for scholars to share knowledge and foster innovation in Islamic sciences.",
+      aboutVenue:
+        language === "en"
+          ? `About ${venueData?.nameEn || "Amman Arab University"}`
+          : `عن ${venueData?.nameAr || "جامعة عمان العربية"}`,
       gettingThere: "Travel & Transportation",
       facilities: "Campus Facilities",
     },
     ar: {
       title: "مكان انعقاد المؤتمر",
       subtitle: "انضم إلينا في حرم جامعة عمان العربية المتميز.",
-      venueName: "جامعة عمان العربية",
-      address: "شارع الأردن، موبص، عمان، الأردن",
-      aboutVenue: "عن جامعة عمان العربية",
-      aboutText:
-        "تعد جامعة عمان العربية مؤسسة رائدة في الأردن، ملتزمة بالتميز الأكاديمي والبحث العلمي. يوفر الحرم الجامعي بيئة حديثة وملهمة للعلماء لتبادل المعرفة وتعزيز الابتكار في العلوم الشرعية.",
+      aboutVenue:
+        language === "ar"
+          ? `عن ${venueData?.nameAr || "جامعة عمان العربية"}`
+          : `About ${venueData?.nameEn || "Amman Arab University"}`,
       gettingThere: "السفر والمواصلات",
       facilities: "مرافق الحرم الجامعي",
     },
   }[language];
 
-  const facilities = [
-    { en: "Main Conference Auditoriums", ar: "قاعات المؤتمرات الرئيسية" },
-    { en: "Modern Research Labs", ar: "مختبرات بحثية حديثة" },
-    { en: "High-speed Academic Network", ar: "شبكة أكاديمية عالية السرعة" },
-    { en: "A Mosque within the University Campus", ar: "مسجد داخل الحرم الجامعي" },
-    { en: "Scientific Exhibition Areas", ar: "مساحات للمعارض العلمية" },
-    { en: "Catering & Dining Facilities", ar: "مرافق الإطعام والضيافة" },
-  ];
+  if (loading) {
+    return (
+      <div className="py-20 bg-background min-h-screen flex items-center justify-center">
+        <Loader className="animate-spin text-primary" size={48} />
+      </div>
+    );
+  }
+
+  if (!venueData) {
+    return null;
+  }
 
   return (
     <div className="py-20 bg-background min-h-screen">
@@ -100,10 +177,10 @@ export default function Venue({ language }: VenueProps) {
                 </span>
               </div>
               <h2 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
-                {t.venueName}
+                {isRtl ? venueData.nameAr : venueData.nameEn}
               </h2>
               <p className="text-xl text-secondary/80 font-medium">
-                {t.address}
+                {isRtl ? venueData.addressAr : venueData.addressEn}
               </p>
             </motion.div>
           </div>
@@ -114,18 +191,18 @@ export default function Venue({ language }: VenueProps) {
                 <div className="text-primary/40 text-xs font-bold uppercase tracking-widest mb-1">
                   {isRtl ? "الهاتف" : "Phone"}
                 </div>
-                <div className="font-bold text-primary">+962 6 4790222</div>
+                <div className="font-bold text-primary">{venueData.phone}</div>
               </div>
               <div className="w-px h-10 bg-neutral-100 hidden md:block" />
               <div>
                 <div className="text-primary/40 text-xs font-bold uppercase tracking-widest mb-1">
                   {isRtl ? "البريد" : "Email"}
                 </div>
-                <div className="font-bold text-primary">info@aau.edu.jo</div>
+                <div className="font-bold text-primary">{venueData.email}</div>
               </div>
             </div>
             <a
-              href={mapUrl}
+              href={venueData.mapUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full md:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl shadow-primary/20 hover:bg-accent group active:scale-95"
@@ -149,20 +226,26 @@ export default function Venue({ language }: VenueProps) {
                 {t.aboutVenue}
               </h2>
               <p className="text-neutral-600 leading-relaxed text-lg mb-8 relative z-10">
-                {t.aboutText}
+                {isRtl ? venueData.aboutAr : venueData.aboutEn}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
-                {facilities.map((f, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 text-sm text-neutral-700 font-medium"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-accent/10">
-                      <ShieldCheck className="text-accent" size={16} />
+                {venueData.features && venueData.features.length > 0 ? (
+                  venueData.features.map((f, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 text-sm text-neutral-700 font-medium"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-accent/10">
+                        <ShieldCheck className="text-accent" size={16} />
+                      </div>
+                      <span>{isRtl ? f.ar : f.en}</span>
                     </div>
-                    <span>{isRtl ? f.ar : f.en}</span>
+                  ))
+                ) : (
+                  <div className="col-span-2 text-center text-neutral-400 py-4">
+                    {isRtl ? "لا توجد ميزات متاحة" : "No features available"}
                   </div>
-                ))}
+                )}
               </div>
               <div className="absolute bottom-0 right-0 w-32 h-32 bg-secondary/50 rounded-full blur-3xl opacity-50" />
             </div>

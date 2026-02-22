@@ -9,23 +9,23 @@ export default function CallForPapers({ language }: CallForPapersProps) {
   const isRtl = language === 'ar';
   const t = {
     en: {
-      title: 'Paper Submission & Publication',
-      submission: 'Submission Process',
-      email: 'scientific.research2@aau.edu.jo',
-      pubTitle: 'Publication Options',
-      rulesTitle: 'Paper Submission Rules',
-      formatting: 'Formatting Guidelines',
-      similarity: 'Similarity & AI Policy',
+      title: "Paper Submission & Publication",
+      submission: "Submission Process",
+      email: "CISRAI2026@aau.edu.jo",
+      pubTitle: "Publication Options",
+      rulesTitle: "Paper Submission Rules",
+      formatting: "Formatting Guidelines",
+      similarity: "Similarity & AI Policy",
     },
     ar: {
-      title: 'تقديم الأبحاث والنشر',
-      submission: 'عملية التقديم',
-      email: 'scientific.research2@aau.edu.jo',
-      pubTitle: 'خيارات النشر',
-      rulesTitle: 'قواعد تقديم الأوراق البحثية',
-      formatting: 'إرشادات التنسيق',
-      similarity: 'سياسة التشابه والذكاء الاصطناعي',
-    }
+      title: "تقديم الأبحاث والنشر",
+      submission: "عملية التقديم",
+      email: "CISRAI2026@aau.edu.jo",
+      pubTitle: "خيارات النشر",
+      rulesTitle: "قواعد تقديم الأوراق البحثية",
+      formatting: "إرشادات التنسيق",
+      similarity: "سياسة التشابه والذكاء الاصطناعي",
+    },
   }[language];
 
   const publicationOptions = [
@@ -169,13 +169,13 @@ export default function CallForPapers({ language }: CallForPapersProps) {
               </div>
               <p className="text-amber-900/80 leading-relaxed mb-6">
                 {isRtl 
-                  ? 'يخضع كل بحث لفحص التشابه والذكاء الاصطناعي. الحد الأقصى المقبول للتشابه هو 25%.' 
-                  : 'All papers undergo plagiarism and AI usage checks. Maximum acceptable similarity is 25%.'
+                  ? 'يخضع كل بحث لفحص التشابه والذكاء الاصطناعي. الحد الأقصى المقبول للتشابه هو 20%.' 
+                  : 'All papers undergo plagiarism and AI usage checks. Maximum acceptable similarity is 20%.'
                 }
               </p>
               <div className="flex items-center justify-between bg-white px-6 py-4 rounded-xl border border-amber-200 shadow-inner">
                 <span className="text-sm font-bold text-amber-700 uppercase tracking-widest">{isRtl ? 'الحد الأقصى' : 'Max Limit'}</span>
-                <span className="text-3xl font-black text-amber-900">25%</span>
+                <span className="text-3xl font-black text-amber-900">20%</span>
               </div>
             </div>
           </section>

@@ -77,7 +77,7 @@ export default function RegistrationRules({
       subtitle: "Official guidelines for researchers and authors.",
       similarityTitle: "Similarity & AI Ethics",
       similarityDesc:
-        "All submissions are screened for plagiarism and AI-generated content. Maximum acceptable similarity index is 25%.",
+        "All submissions are screened for plagiarism and AI-generated content. Maximum acceptable similarity index is 20%.",
       notice: "Adherence to these rules is mandatory for consideration.",
     },
     ar: {
@@ -85,7 +85,7 @@ export default function RegistrationRules({
       subtitle: "الإرشادات الرسمية للباحثين والمؤلفين.",
       similarityTitle: "أخلاقيات التشابه والذكاء الاصطناعي",
       similarityDesc:
-        "تخضع جميع المشاركات لفحص السرقة الأدبية والمحتوى المولد بالذكاء الاصطناعي. الحد الأقصى المقبول لمعامل التشابه هو 25٪.",
+        "تخضع جميع المشاركات لفحص السرقة الأدبية والمحتوى المولد بالذكاء الاصطناعي. الحد الأقصى المقبول لمعامل التشابه هو 20٪.",
       notice: "الالتزام بهذه القواعد إلزامي للنظر في البحث.",
     },
   }[language];
@@ -179,7 +179,7 @@ export default function RegistrationRules({
                 <span className="text-xs font-bold text-primary/60 uppercase tracking-widest">
                   {isRtl ? "الحد" : "Limit"}
                 </span>
-                <span className="text-3xl font-black text-primary">25%</span>
+                <span className="text-3xl font-black text-primary">20%</span>
               </div>
             </div>
           </div>

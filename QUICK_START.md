@@ -24,7 +24,7 @@ mongod
 3. Get connection string
 4. Update backend `.env`:
    ```
-   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/cisrai
+   MONGO_URI=
    ```
 
 ## Step 2: Start Backend Server

@@ -139,7 +139,7 @@ export function Sidebar({ language }: SidebarProps) {
         <div className="h-24 flex items-center px-6 border-b border-accent/10">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="../../public/logo1.png"
+              src="../logo1.png"
               alt="Logo"
               className="w-22 h-20 object-contain flex-shrink-0"
               loading="lazy"

@@ -18,6 +18,7 @@ import scheduleRoutes from "./routes/schedule.routes";
 import committeeRoutes from "./routes/committee.routes";
 import announcementRoutes from "./routes/announcement.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
+import settingsRoutes from "./routes/settings.routes";
 
 // Import Middleware
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
@@ -76,13 +77,30 @@ app.use(compression());
 // Logging
 app.use(morgan("combined"));
 
-// Rate Limiting
+// Rate Limiting - More relaxed in development
 const limiter = rateLimit({
   windowMs: env.RATE_LIMIT_WINDOW_MS,
   max: env.RATE_LIMIT_MAX_REQUESTS,
   message: "Too many requests, please try again later.",
+  standardHeaders: true,
+  legacyHeaders: false,
 });
+
+// Separate rate limiter for auth routes (prevent brute force)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: env.isDev ? 50 : 10, // 50 attempts in dev, 10 in production
+  message: "Too many login attempts, please try again later.",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply general rate limiting to all API routes
 app.use("/api/", limiter);
+
+// Apply stricter rate limiting to auth routes
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/register", authLimiter);
 
 // Health Check
 app.get("/health", (req: Request, res: Response) => {
@@ -101,6 +119,7 @@ app.use("/api/schedule", scheduleRoutes);
 app.use("/api/committees", committeeRoutes);
 app.use("/api/announcements", announcementRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // 404 Handler
 app.use(notFoundHandler);

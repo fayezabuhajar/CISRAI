@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Clock,
   MapPin,
@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { settingsAPI } from "../../services/api";
 
 interface ScheduleItem {
   time: string;
@@ -26,7 +27,32 @@ interface ScheduleProps {
 
 export default function Schedule({ language }: ScheduleProps) {
   const [activeDay, setActiveDay] = useState(1);
+  const [venueName, setVenueName] = useState({
+    en: "Amman Arab University Campus",
+    ar: "حرم جامعة عمان العربية",
+  });
   const isRtl = language === "ar";
+
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      try {
+        const response = (await settingsAPI.getVenue()) as {
+          success: boolean;
+          data: { nameEn: string; nameAr: string };
+        };
+        if (response.success && response.data) {
+          setVenueName({
+            en: response.data.nameEn + " Campus",
+            ar: "حرم " + response.data.nameAr,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching venue data:", error);
+      }
+    };
+
+    fetchVenueData();
+  }, []);
 
   const scheduleData = {
     day1: [
@@ -123,14 +149,12 @@ export default function Schedule({ language }: ScheduleProps) {
       desc: "A comprehensive two-day academic program exploring AI and Islamic sciences.",
       day1: "Day One: Academic Sessions",
       day2: "Day Two: Sessions & Cultural Event",
-      location: "Amman Arab University Campus",
     },
     ar: {
       title: "برنامج المؤتمر",
       desc: "برنامج أكاديمي شامل لمدة يومين يستكشف الذكاء الاصطناعي والعلوم الشرعية.",
       day1: "اليوم الأول: الجلسات الأكاديمية",
       day2: "اليوم الثاني: الجلسات والفعالية الثقافية",
-      location: "حرم جامعة عمان العربية",
     },
   }[language];
 
@@ -200,7 +224,7 @@ export default function Schedule({ language }: ScheduleProps) {
                   </h3>
                   <div className="flex items-center gap-2 text-neutral-400 text-sm mt-1">
                     <MapPin size={14} className="text-accent/50" />
-                    <span>{t.location}</span>
+                    <span>{isRtl ? venueName.ar : venueName.en}</span>
                   </div>
                 </div>
               </div>

@@ -142,6 +142,10 @@ export default function Registration({ language }: RegistrationProps) {
       iban: "JO68 IIBA 1190 0000 0119 0000 0175 00",
       swift: "IIBAJOAM200",
       paymentNote: "Last payment date: April 30, 2026",
+      paymentReceiptNote: "Please send payment receipt to:",
+      receiptEmail: "CISRAI2026@aau.edu.jo",
+      receiptWhatsApp: "+962 7 9887 2239",
+      orVia: "or via WhatsApp:",
       visaNote:
         "Travel, accommodation, and visa costs are covered by participants.",
       formTitle: "Participant Details",
@@ -169,6 +173,10 @@ export default function Registration({ language }: RegistrationProps) {
       iban: "JO68 IIBA 1190 0000 0119 0000 0175 00",
       swift: "IIBAJOAM200",
       paymentNote: "آخر موعد للدفع: 30 أبريل 2026",
+      paymentReceiptNote: "يرجى إرسال وصل الدفع إلى:",
+      receiptEmail: "CISRAI2026@aau.edu.jo",
+      receiptWhatsApp: "+962 7 9887 2239",
+      orVia: "أو عبر الواتساب:",
       visaNote: "تكاليف السفر والإقامة والتأشيرة تقع على عاتق المشاركين.",
       formTitle: "بيانات المشارك",
       submit: "تأكيد التسجيل",
@@ -369,6 +377,33 @@ export default function Registration({ language }: RegistrationProps) {
                   <Calendar size={20} className="text-accent" />
                   <span className="font-bold">{t.paymentNote}</span>
                 </div>
+
+                <div className="mt-4 space-y-3 text-secondary bg-white/5 p-4 rounded-2xl border border-accent/20">
+                  <div className="flex items-start gap-3">
+                    <Mail size={18} className="text-accent mt-0.5 shrink-0" />
+                    <div className="text-sm leading-relaxed">
+                      <div className="font-bold mb-2">
+                        {t.paymentReceiptNote}
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono bg-white/80 px-3 py-1 rounded-lg text-accent text-x5 border border-white/40">
+                            {t.receiptEmail}
+                          </span>
+                        </div>
+                        <div className="text-xs opacity-90 mt-2">{t.orVia}</div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span
+                            className="font-mono bg-white/80 px-3 py-1 rounded-lg text-accent text-x5 border border-white/40 direction-ltr"
+                            dir="ltr"
+                          >
+                            {t.receiptWhatsApp}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="absolute top-0 right-0 w-64 h-64 bg-accent rounded-full blur-3xl opacity-10 -mr-32 -mt-32" />
             </div>
@@ -502,43 +537,44 @@ export default function Registration({ language }: RegistrationProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">
-                    {t.institution}
-                  </label>
-                  <div className="relative">
-                    <Building
-                      className={`absolute ${isRtl ? "right-4" : "left-4"} top-3.5 text-accent`}
-                      size={18}
-                    />
-                    <input
-                      type="text"
-                      name="institution"
-                      value={formData.institution}
-                      onChange={handleInputChange}
-                      className={`w-full ${isRtl ? "pr-12 pl-4" : "pl-12 pr-4"} py-3 rounded-xl border border-neutral-100 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all`}
-                      disabled={isLoading}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">
-                    {t.phone}
-                  </label>
-                  <CountryPhoneInput
-                    language={language}
+              {/* Institution */}
+              <div>
+                <label className="block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">
+                  {t.institution}
+                </label>
+                <div className="relative">
+                  <Building
+                    className={`absolute ${isRtl ? "right-4" : "left-4"} top-3.5 text-accent`}
+                    size={18}
+                  />
+                  <input
+                    type="text"
+                    name="institution"
+                    value={formData.institution}
+                    onChange={handleInputChange}
+                    className={`w-full ${isRtl ? "pr-12 pl-4" : "pl-12 pr-4"} py-3 rounded-xl border border-neutral-100 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all`}
                     disabled={isLoading}
-                    required
-                    onChange={(phone, country) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        phone,
-                        country: country.name,
-                      }))
-                    }
                   />
                 </div>
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">
+                  {t.phone}
+                </label>
+                <CountryPhoneInput
+                  language={language}
+                  disabled={isLoading}
+                  required
+                  onChange={(phone, country) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      phone,
+                      country: country.name,
+                    }))
+                  }
+                />
               </div>
 
               <div className="pt-6">

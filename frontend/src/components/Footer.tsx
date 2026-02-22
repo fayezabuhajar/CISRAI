@@ -26,7 +26,7 @@ export default function Footer({ language }: FooterProps) {
       links: "Quick Navigation",
       contact: "Contact Us",
       organizedBy:
-        "Organized by Faculty of Sharia & Deanship of Scientific Research",
+        "Organized by Faculty of Sharia & Deanship of Scientific Research and Postgraduate Studies",
       rights: "All rights reserved.",
       university: "Amman Arab University",
     },
@@ -36,7 +36,7 @@ export default function Footer({ language }: FooterProps) {
         "مؤتمر أكاديمي دولي يستكشف أثر الذكاء الاصطناعي على العلوم الشرعية ومنهجيات البحث العلمي.",
       links: "روابط سريعة",
       contact: "اتصل بنا",
-      organizedBy: "تنظيم كلية الشريعة وعمادة البحث العلمي",
+      organizedBy: "تنظيم كلية الشريعة وعمادة البحث العلمي والدراسات العليا",
       rights: "جميع الحقوق محفوظة.",
       university: "جامعة عمان العربية",
     },
@@ -114,7 +114,7 @@ export default function Footer({ language }: FooterProps) {
               </div>
               <div className="flex items-start gap-3">
                 <Phone size={16} className="mt-1 text-[#D4AF37]" />
-                <span dir="ltr">+962 6 4790222</span>
+                <span dir="ltr">+962 7 9887 2239</span>
               </div>
               <div className="flex items-start gap-3">
                 <MapPin size={16} className="mt-1 text-[#D4AF37]" />
