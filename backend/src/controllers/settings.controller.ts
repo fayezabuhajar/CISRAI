@@ -136,4 +136,34 @@ export const settingsController = {
       });
     }
   },
+
+  async getPaymentDeadline(req: Request, res: Response, next: NextFunction) {
+    try {
+      const paymentDeadline = await settingsService.getPaymentDeadline();
+      res.status(200).json({
+        success: true,
+        data: paymentDeadline,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async updatePaymentDeadline(req: Request, res: Response, next: NextFunction) {
+    try {
+      const paymentDeadlineData = req.body;
+      const updatedPaymentDeadline =
+        await settingsService.updatePaymentDeadline(paymentDeadlineData);
+      res.status(200).json({
+        success: true,
+        message: "Payment deadline updated successfully",
+        data: updatedPaymentDeadline,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: getErrorMessage(error),
+      });
+    }
+  },
 };

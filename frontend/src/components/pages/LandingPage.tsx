@@ -225,34 +225,34 @@ export default function LandingPage({ language }: LandingPageProps) {
     {
       id: 1,
       title: {
-        en: "Reality of Sharia Curricula and Content in Educational Institutions",
-        ar: "واقع المناهج والمحتوى الشرعي في المؤسسات التعليمية",
+        en: "Reality of Sharia Science Curricula and Content in Educational Institutions",
+        ar: "واقع مناهج ومحتوى العلوم الشرعية في المؤسسات التعليمية",
       },
       description: {
-        en: "This track analyzes the current state of Sharia curricula adopted in educational institutions in terms of knowledge structure, presentation methods, and alignment with modern educational and scientific developments, while identifying challenges related to curriculum modernization and balancing authenticity with contemporary needs.",
-        ar: "يحلل هذا المحور الوضع الحالي للمناهج الشرعية المعتمدة في المؤسسات التعليمية من حيث البنية المعرفية وطرق العرض والمواءمة مع التطورات التعليمية والعلمية الحديثة، مع تحديد التحديات المتعلقة بتحديث المناهج والموازنة بين الأصالة والاحتياجات المعاصرة.",
+        en: "This track examines the current state of Sharia science curricula and content in educational institutions through critical analytical evaluation, assessing alignment with contemporary requirements amid epistemological, social, intellectual, and technological transformations, quality standards under academic accreditation, challenges in the digital age, impact of smart technologies on curriculum development and teaching strategies, and development experiences.",
+        ar: "يتناول هذا المحور تشخيص واقع مناهج العلوم الشرعية دراسة تحليلية نقدية تقويمية، ومدى مواكبتها لمتطلبات العصر في ظل التحولات المعاصرة المعرفية والاجتماعية والفكرية والتقنية، ومعايير جودة المناهج الشرعية في ضوء الاعتماد الأكاديمي والتحولات المعاصرة، والتحديات والإشكالات في ظل التحولات الرقمية، وأثر التقنيات الذكية في تطوير المناهج واستراتيجيات التدريس والتقويم، وتجارب وآفاق تطوير مناهج العلوم الشرعية.",
       },
     },
     {
       id: 2,
       title: {
         en: "Scientific Research in Sharia Sciences and Curricula: Reality and Development Prospects",
-        ar: "البحث العلمي في العلوم الشرعية والمناهج: الواقع وآفاق التطوير",
+        ar: "البحث العلمي في العلوم والمناهج الشرعية - الواقع وآفاق التطوير",
       },
       description: {
-        en: "This track focuses on the reality of scientific research in Sharia sciences and curricula, including methodologies, research priorities, and academic output, while exploring future development opportunities to enhance research quality and societal impact.",
-        ar: "يركز هذا المحور على واقع البحث العلمي في العلوم الشرعية والمناهج، بما في ذلك المنهجيات والأولويات البحثية والإنتاج الأكاديمي، مع استكشاف فرص التطوير المستقبلية لتعزيز جودة البحث وتأثيره المجتمعي.",
+        en: "This track focuses on the reality of scientific research in Sharia sciences through critical analytical evaluation, disciplined methodological renewal in developing Sharia research, integration between Sharia sciences and humanities and applied sciences, and the role of scientific institutions in developing Sharia research in light of digital transformations.",
+        ar: "يركز هذا المحور على واقع البحث العلمي في العلوم الشرعية دراسة تحليلية نقدية تقويمية، والتجديد المنهجي المنضبط في تطوير البحث العلمي الشرعي، والتكامل بين العلوم الشرعية والعلوم الإنسانية والتطبيقية في البحث العلمي، ودور المؤسسات العلمية في تطوير البحث العلمي الشرعي في ضوء التحولات الرقمية.",
       },
     },
     {
       id: 3,
       title: {
-        en: "University-Level Islamic Education in the Age of Artificial Intelligence",
-        ar: "التعليم الشرعي الجامعي في عصر الذكاء الاصطناعي",
+        en: "University-Level Academic Sharia Education in the Age of Artificial Intelligence",
+        ar: "التعليم الأكاديمي الجامعي الشرعي في عصر الذكاء الاصطناعي",
       },
       description: {
-        en: "This track discusses the impact of digital transformation and AI technologies on Islamic higher education, including teaching methods, learning environments, student assessment, and the evolving role of faculty members, highlighting opportunities and challenges of AI integration.",
-        ar: "يناقش هذا المحور تأثير التحول الرقمي وتقنيات الذكاء الاصطناعي على التعليم الشرعي العالي، بما في ذلك طرق التدريس وبيئات التعلم وتقييم الطلاب والدور المتطور لأعضاء هيئة التدريس، مع تسليط الضوء على فرص وتحديات دمج الذكاء الاصطناعي.",
+        en: "This track discusses university-level Sharia education amid transformations brought by artificial intelligence, challenges of employing AI in academic Sharia education, and prospects for developing university Sharia education to achieve quality and sustainability.",
+        ar: "يناقش هذا المحور التعليم الجامعي الشرعي في ظل التحولات التي أحدثها الذكاء الاصطناعي، وتحديات توظيف الذكاء الاصطناعي في التعليم الأكاديمي الجامعي الشرعي، واستشراف آفاق تطوير التعليم الشرعي الجامعي بما يحقق الجودة والاستدامة.",
       },
     },
     {
@@ -262,41 +262,41 @@ export default function LandingPage({ language }: LandingPageProps) {
         ar: "الذكاء الاصطناعي والبحث العلمي الشرعي",
       },
       description: {
-        en: "This track addresses the use of AI technologies in Sharia research, such as analyzing Islamic texts, supporting comparative studies, and accelerating research and indexing processes, while emphasizing ethical and scientific regulations governing AI use in Sharia fields.",
-        ar: "يتناول هذا المحور استخدام تقنيات الذكاء الاصطناعي في البحث الشرعي، مثل تحليل النصوص الإسلامية ودعم الدراسات المقارنة وتسريع عمليات البحث والفهرسة، مع التأكيد على الضوابط الأخلاقية والعلمية التي تحكم استخدام الذكاء الاصطناعي في المجالات الشرعية.",
+        en: "This track addresses the role of artificial intelligence in developing Sharia scientific research, methodological and ethical challenges associated with employing AI in Sharia studies research, and Sharia standards and controls in using AI technologies in Sharia scientific research.",
+        ar: "يتناول هذا المحور دور الذكاء الاصطناعي في تطوير البحث العلمي الشرعي، والتحديات والاشكالات المنهجية والأخلاقية المرتبطة بتوظيف الذكاء الاصطناعي في البحث العلمي في الدراسات الشرعية، والمعايير والضوابط الشرعية في استخدام تقنيات الذكاء الاصطناعي في البحث العلمي الشرعي.",
       },
     },
     {
       id: 5,
       title: {
-        en: "Educational Content in Islamic Sciences in the Age of Artificial Intelligence",
+        en: "Educational Content in Sharia Sciences in the Age of Artificial Intelligence",
         ar: "المحتوى التعليمي في العلوم الشرعية في عصر الذكاء الاصطناعي",
       },
       description: {
-        en: "This track focuses on developing Islamic educational content using AI tools, including interactive digital content design, personalized learning, and improving educational material quality to enhance effective knowledge transfer.",
-        ar: "يركز هذا المحور على تطوير المحتوى التعليمي الشرعي باستخدام أدوات الذكاء الاصطناعي، بما في ذلك تصميم المحتوى الرقمي التفاعلي والتعلم الشخصي وتحسين جودة المواد التعليمية لتعزيز نقل المعرفة بفعالية.",
+        en: "This track focuses on analyzing the reality of scientific content in Sharia sciences (Quranic sciences, Hadith sciences, creed, jurisprudence, principles of jurisprudence, Da'wah) amid digital transformations, evaluating quality and scientific methodology of digital Sharia content, producing scientific Sharia content according to Sharia controls, achieving value, educational, and skill dimensions and competencies in Sharia sciences content, and developing Sharia content to achieve authenticity and contemporaneity.",
+        ar: "يركز هذا المحور على تحليل واقع المحتوى العلمي في العلوم الشرعية (علوم القرآن، علوم الحديث، العقيدة، الفقه، أصول الفقه، الدعوة) في ظل التحولات الرقمية، وتقييم جودة المحتوى الشرعي الرقمي ومنهجيته العلمية، وانتاج المحتوى العلمي الشرعي وفق الضوابط الشرعية في ظل التحولات الرقمية، وتحقق الأبعاد القيمية والتربوية والمهارية والكفايات في محتوى العلوم الشرعية وأثرها على المتعلمين، وتطوير المحتوى الشرعي بما يحقق الأصالة والمعاصرة.",
       },
     },
     {
       id: 6,
       title: {
-        en: "Practical Experiences and Leading Practices in Producing Islamic Academic Curricula and Content",
-        ar: "التجارب العملية والممارسات الرائدة في إنتاج المناهج والمحتوى الأكاديمي الشرعي",
+        en: "Practical Experiences and Leading Practices in Producing Sharia Academic Curricula and Content",
+        ar: "تجارب عملية وممارسات رائدة في انتاج المناهج والمحتويات الاكاديمية الشرعية",
       },
       description: {
-        en: "This track presents successful practical models and pioneering experiences in developing Islamic academic curricula and content at local, regional, and international levels, analyzing success factors and scalability.",
-        ar: "يقدم هذا المحور نماذج عملية ناجحة وتجارب رائدة في تطوير المناهج والمحتوى الأكاديمي الشرعي على المستويات المحلية والإقليمية والدولية، مع تحليل عوامل النجاح وقابلية التوسع.",
+        en: "This track presents practical models and innovative practices in producing Sharia academic curricula and content, and evaluates innovative models in developing Sharia curricula and content in terms of quality and effectiveness.",
+        ar: "يقدم هذا المحور عرض نماذج عملية وممارسات مبتكرة في إنتاج المناهج والمحتويات الأكاديمية الشرعية، وتقييم نماذج مبتكرة في تطوير المناهج والمحتوى الشرعي من حيث الجودة والفاعلية.",
       },
     },
     {
       id: 7,
       title: {
-        en: "Role of Educational and Sharia Institutions in Developing Islamic Curricula and Content",
-        ar: "دور المؤسسات التعليمية والشرعية في تطوير المناهج والمحتوى الشرعي",
+        en: "Role of Educational and Sharia Institutions in Developing Sharia Curricula and Content",
+        ar: "دور المؤسسات التعليمية والشرعية في تطوير المحتويات والمناهج الدراسية الشرعية",
       },
       description: {
-        en: "This track discusses the role of educational and Sharia institutions in leading curriculum and content development through academic policies, partnerships, capacity building, and quality assurance to achieve sustainable and contemporary Islamic education.",
-        ar: "يناقش هذا المحور دور المؤسسات التعليمية والشرعية في قيادة تطوير المناهج والمحتوى من خلال السياسات الأكاديمية والشراكات وبناء القدرات وضمان الجودة لتحقيق تعليم شرعي مستدام ومعاصر.",
+        en: "This track discusses epistemological integration between Sharia sciences and related sciences (educational sciences, law, Arabic language, sociology, history, geography), interdisciplinary integration in improving quality and educational effectiveness of Sharia curricula, and exchange of expertise between educational institutions and researchers in producing Sharia academic curricula and content.",
+        ar: "يناقش هذا المحور التكامل المعرفي بين العلوم الشرعية والعلوم ذات الصلة (العلوم التربوية، القانون، اللغة العربية، علم الاجتماع، التاريخ، الجغرافيا)، والتكامل البيني في تحسين جودة المناهج الشرعية وفاعليتها التعليمية، وتبادل الخبرات بين المؤسسات التعليمية والباحثين في انتاج المناهج والمحتويات الاكاديمية الشرعية.",
       },
     },
   ];
@@ -414,16 +414,31 @@ export default function LandingPage({ language }: LandingPageProps) {
                 {isRtl ? "رئيس المؤتمر" : "President"}
               </div>
               <div className="font-medium text-lg">
-                {isRtl ? "أ.د. إسماعيل يامين" : "Prof. Dr. Ismail Yamin"}
+                {isRtl ? "اﻟﺪﻛﺘﻮرة كفاح الصوري" : "Dr. Kifah Al-Souri"}
               </div>
             </div>
             <div className="h-px bg-[#333333]/10" />
             <div>
               <div className="text-xs text-[#333333]/50 uppercase">
-                {isRtl ? "رئيس اللجنة العلمية" : "Scientific Committee Chair"}
+                {isRtl
+                  ? "المنسق العام للمؤتمر"
+                  : "General Conference Coordinator"}
               </div>
               <div className="font-medium text-lg">
-                {isRtl ? "د. كفاح الصوري" : "Dr. Kifah Al-Souri"}
+                {isRtl
+                  ? "الأستاذ الدكتور اسماعيل يامين"
+                  : "Professor Dr. Ismail Yamin"}
+              </div>
+            </div>
+            <div className="h-px bg-[#333333]/10" />
+            <div>
+              <div className="text-xs text-[#333333]/50 uppercase">
+                {isRtl ? "رئيس اللجنة التحضيرية" : "Scientific Committee Chair"}
+              </div>
+              <div className="font-medium text-lg">
+                {isRtl
+                  ? "الأستاذ الدكتور حســـن الزعبـــي"
+                  : "Dr. Hassan Al-Zoubi"}
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import Settings, {
   IVenueSettings,
   IImportantDate,
   ISponsor,
+  IPaymentDeadline,
 } from "../models/Settings";
 
 export const settingsService = {
@@ -79,5 +80,17 @@ export const settingsService = {
     settings.sponsors = sponsors;
     await settings.save();
     return settings.sponsors;
+  },
+
+  async getPaymentDeadline() {
+    const settings = await (Settings as any).getSettings();
+    return settings.paymentDeadline;
+  },
+
+  async updatePaymentDeadline(paymentDeadlineData: IPaymentDeadline) {
+    const settings = await (Settings as any).getSettings();
+    settings.paymentDeadline = paymentDeadlineData;
+    await settings.save();
+    return settings.paymentDeadline;
   },
 };

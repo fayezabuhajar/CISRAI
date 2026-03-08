@@ -3,9 +3,8 @@ import {
   Phone,
   MapPin,
   Facebook,
-  Twitter,
-  Linkedin,
-  Youtube,
+  Instagram,
+  MessageCircle,
   GraduationCap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -129,14 +128,33 @@ export default function Footer({ language }: FooterProps) {
               {isRtl ? "تابعنا" : "Follow Us"}
             </h3>
             <div className="flex gap-4">
-              {[Facebook, Twitter, Linkedin, Youtube].map((Icon, i) => (
-                <button
-                  key={i}
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:text-white transition-all"
-                >
-                  <Icon size={18} />
-                </button>
-              ))}
+              <a
+                href="https://www.facebook.com/share/1BwnRBYkDp/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:text-white transition-all"
+                aria-label="Facebook"
+              >
+                <Facebook size={18} />
+              </a>
+              <a
+                href="https://www.instagram.com/cirai2026confernase?utm_source=qr&igsh=YnVtb3BhMm5sZDY5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:text-white transition-all"
+                aria-label="Instagram"
+              >
+                <Instagram size={18} />
+              </a>
+              <a
+                href="https://wa.me/message/G2WGKPJSHD76D1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#D4AF37] hover:text-white transition-all"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle size={18} />
+              </a>
             </div>
             <div className="mt-8 pt-8 border-t border-white/5">
               <div className="flex items-center gap-2 text-[#D4AF37]">

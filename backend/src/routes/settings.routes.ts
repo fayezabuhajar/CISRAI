@@ -16,6 +16,9 @@ router.get("/patron-name", settingsController.getPatronName);
 // Public route - anyone can get sponsors
 router.get("/sponsors", settingsController.getSponsors);
 
+// Public route - anyone can get payment deadline
+router.get("/payment-deadline", settingsController.getPaymentDeadline);
+
 // Protected routes - only admins can update
 router.get("/", adminAuthMiddleware, settingsController.getSettings);
 router.put("/venue", adminAuthMiddleware, settingsController.updateVenue);
@@ -30,5 +33,10 @@ router.put(
   settingsController.updatePatronName,
 );
 router.put("/sponsors", adminAuthMiddleware, settingsController.updateSponsors);
+router.put(
+  "/payment-deadline",
+  adminAuthMiddleware,
+  settingsController.updatePaymentDeadline,
+);
 
 export default router;

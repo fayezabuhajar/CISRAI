@@ -35,6 +35,11 @@ export interface IVenueSettings {
   features: IVenueFeature[];
 }
 
+export interface IPaymentDeadline {
+  dateEn: string;
+  dateAr: string;
+}
+
 export interface ISettings {
   _id: string;
   venue: IVenueSettings;
@@ -42,6 +47,7 @@ export interface ISettings {
   patronNameEn: string;
   patronNameAr: string;
   sponsors: ISponsor[];
+  paymentDeadline: IPaymentDeadline;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -202,6 +208,17 @@ const settingsSchema = new Schema<ISettings>(
           highlight: true,
         },
       ],
+    },
+    paymentDeadline: {
+      type: {
+        dateEn: { type: String, required: true },
+        dateAr: { type: String, required: true },
+      },
+      required: true,
+      default: {
+        dateEn: "30 May 2026",
+        dateAr: "30 مايو 2026",
+      },
     },
   },
   { timestamps: true },

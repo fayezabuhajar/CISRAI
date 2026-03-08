@@ -531,4 +531,12 @@ export const settingsAPI = {
   updateSponsors: async (data: unknown[]) => {
     return apiRequest("/settings/sponsors", "PUT", data);
   },
+
+  getPaymentDeadline: async () => {
+    return apiRequest("/settings/payment-deadline", "GET", undefined, false);
+  },
+
+  updatePaymentDeadline: async (data: { dateEn: string; dateAr: string }) => {
+    return apiRequest("/settings/payment-deadline", "PUT", data);
+  },
 };

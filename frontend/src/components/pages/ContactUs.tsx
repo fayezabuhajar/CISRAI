@@ -4,9 +4,8 @@ import {
   MapPin,
   Send,
   Facebook,
-  Twitter,
-  Linkedin,
-  Globe,
+  Instagram,
+  MessageCircle,
   MessageSquare,
   ShieldCheck,
   AlertCircle,
@@ -183,14 +182,34 @@ export default function ContactUs({ language }: ContactUsProps) {
             <div className="bg-white p-8 rounded-[32px] border border-neutral-100 shadow-xl shadow-primary/5">
               <h3 className="font-bold text-primary mb-6">{t.follow}</h3>
               <div className="flex gap-4">
-                {[Facebook, Twitter, Linkedin, Globe].map((Icon, i) => (
-                  <button
-                    key={i}
-                    className="w-12 h-12 rounded-xl bg-secondary text-primary flex items-center justify-center hover:bg-accent hover:text-white transition-all border border-accent/10"
-                  >
-                    <Icon size={20} />
-                  </button>
-                ))}
+                <a
+                  href="https://www.facebook.com/share/1BwnRBYkDp/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-secondary text-primary flex items-center justify-center hover:bg-accent hover:text-white transition-all border border-accent/10"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={20} />
+                </a>
+                <a
+                  href="https://www.instagram.com/cirai2026confernase?utm_source=qr&igsh=YnVtb3BhMm5sZDY5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-secondary text-primary flex items-center justify-center hover:bg-accent hover:text-white transition-all border border-accent/10"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={20} />
+                </a>
+                <a
+                  href="https://wa.me/message/G2WGKPJSHD76D1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-secondary text-primary flex items-center justify-center hover:bg-accent hover:text-white transition-all border border-accent/10"
+                  aria-label="WhatsApp"
+                >
+                  <MessageCircle size={20} />
+                </a>
+              
               </div>
             </div>
           </div>

@@ -166,6 +166,22 @@ export default function DashboardOverview({
   const [sponsorsSaving, setSponsorsSaving] = useState(false);
   const [sponsorsForm, setSponsorsForm] = useState<Sponsor[]>([]);
 
+  // Payment Deadline management state
+  interface PaymentDeadlineData {
+    dateEn: string;
+    dateAr: string;
+  }
+  const [paymentDeadline, setPaymentDeadline] =
+    useState<PaymentDeadlineData | null>(null);
+  const [paymentDeadlineLoading, setPaymentDeadlineLoading] = useState(true);
+  const [editingPaymentDeadline, setEditingPaymentDeadline] = useState(false);
+  const [paymentDeadlineSaving, setPaymentDeadlineSaving] = useState(false);
+  const [paymentDeadlineForm, setPaymentDeadlineForm] =
+    useState<PaymentDeadlineData>({
+      dateEn: "",
+      dateAr: "",
+    });
+
   useEffect(() => {
     // Load initial data once
     loadDashboardStats();
@@ -174,12 +190,19 @@ export default function DashboardOverview({
     loadImportantDates();
     loadPatronData();
     loadSponsors();
+    loadPaymentDeadline();
   }, []);
 
   useEffect(() => {
     // Auto-refresh stats and messages only (not venue/dates/patron/sponsors)
     // Only when user is not editing
-    if (editingVenue || editingDates || editingPatron || editingSponsors) {
+    if (
+      editingVenue ||
+      editingDates ||
+      editingPatron ||
+      editingSponsors ||
+      editingPaymentDeadline
+    ) {
       return; // Don't set up interval if editing
     }
 
@@ -189,7 +212,13 @@ export default function DashboardOverview({
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [editingVenue, editingDates, editingPatron, editingSponsors]);
+  }, [
+    editingVenue,
+    editingDates,
+    editingPatron,
+    editingSponsors,
+    editingPaymentDeadline,
+  ]);
 
   const loadDashboardStats = async () => {
     try {
@@ -615,6 +644,61 @@ export default function DashboardOverview({
     setSponsorsForm(newSponsors);
   };
 
+  // Payment Deadline management functions
+  const loadPaymentDeadline = async () => {
+    try {
+      setPaymentDeadlineLoading(true);
+      const response = (await settingsAPI.getPaymentDeadline()) as {
+        success?: boolean;
+        data?: PaymentDeadlineData;
+      };
+      if (response.success && response.data) {
+        setPaymentDeadline(response.data);
+        setPaymentDeadlineForm(response.data);
+      }
+    } catch (error) {
+      console.error("Failed to load payment deadline:", error);
+    } finally {
+      setPaymentDeadlineLoading(false);
+    }
+  };
+
+  const handlePaymentDeadlineEdit = () => {
+    if (paymentDeadline) {
+      setPaymentDeadlineForm(paymentDeadline);
+      setEditingPaymentDeadline(true);
+    }
+  };
+
+  const handlePaymentDeadlineSave = async () => {
+    try {
+      setPaymentDeadlineSaving(true);
+      const response = (await settingsAPI.updatePaymentDeadline(
+        paymentDeadlineForm,
+      )) as {
+        success?: boolean;
+      };
+      if (response?.success) {
+        setPaymentDeadline(paymentDeadlineForm);
+        setEditingPaymentDeadline(false);
+        alert(
+          language === "ar"
+            ? "تم حفظ موعد الدفع بنجاح"
+            : "Payment deadline saved successfully",
+        );
+      }
+    } catch (error) {
+      console.error("Failed to save payment deadline:", error);
+      alert(
+        language === "ar"
+          ? "فشل في حفظ موعد الدفع"
+          : "Failed to save payment deadline",
+      );
+    } finally {
+      setPaymentDeadlineSaving(false);
+    }
+  };
+
   const t = {
     en: {
       title: "Dashboard Overview",
@@ -680,6 +764,11 @@ export default function DashboardOverview({
       sponsorLogo: "Logo URL",
       sponsorWebsite: "Website URL (optional)",
       sponsorOrder: "Display Order",
+      paymentDeadlineManagement: "Payment Deadline Management",
+      currentPaymentDeadline: "Current Payment Deadline",
+      editPaymentDeadline: "Edit Payment Deadline",
+      paymentDeadlineDateEn: "Payment Deadline (English)",
+      paymentDeadlineDateAr: "Payment Deadline (Arabic)",
     },
     ar: {
       title: "نظرة عامة",
@@ -745,6 +834,11 @@ export default function DashboardOverview({
       sponsorLogo: "رابط اللوغو",
       sponsorWebsite: "رابط الموقع (اختياري)",
       sponsorOrder: "ترتيب العرض",
+      paymentDeadlineManagement: "إدارة موعد دفع الرسوم",
+      currentPaymentDeadline: "موعد الدفع الحالي",
+      editPaymentDeadline: "تعديل موعد دفع الرسوم",
+      paymentDeadlineDateEn: "موعد الدفع (بالإنجليزية)",
+      paymentDeadlineDateAr: "موعد الدفع (بالعربية)",
     },
   }[language];
 
@@ -1807,6 +1901,139 @@ export default function DashboardOverview({
         ) : (
           <div className="text-center py-8 text-neutral-400">
             {language === "ar" ? "لا يوجد رعاة" : "No sponsors available"}
+          </div>
+        )}
+      </motion.div>
+
+      {/* Payment Deadline Management Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="bg-white rounded-2xl p-4 sm:p-8 shadow-lg border border-neutral-200"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center shrink-0">
+              <Calendar className="text-primary" size={24} />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-primary">
+              {t.paymentDeadlineManagement}
+            </h2>
+          </div>
+          {!editingPaymentDeadline && (
+            <button
+              onClick={handlePaymentDeadlineEdit}
+              disabled={paymentDeadlineLoading}
+              className="px-3 sm:px-4 py-2 bg-primary text-white rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap"
+            >
+              <Edit size={16} className="sm:w-[18px] sm:h-[18px] shrink-0" />
+              {t.editPaymentDeadline}
+            </button>
+          )}
+        </div>
+
+        {paymentDeadlineLoading ? (
+          <div className="flex justify-center py-8">
+            <Loader className="animate-spin" size={32} />
+          </div>
+        ) : editingPaymentDeadline ? (
+          <div className="space-y-6">
+            {/* Payment Deadline Form */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  {t.paymentDeadlineDateEn}
+                </label>
+                <input
+                  type="text"
+                  value={paymentDeadlineForm.dateEn}
+                  onChange={(e) =>
+                    setPaymentDeadlineForm({
+                      ...paymentDeadlineForm,
+                      dateEn: e.target.value,
+                    })
+                  }
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="30 May 2026"
+                />
+              </div>
+              <div dir="rtl">
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  {t.paymentDeadlineDateAr}
+                </label>
+                <input
+                  type="text"
+                  value={paymentDeadlineForm.dateAr}
+                  onChange={(e) =>
+                    setPaymentDeadlineForm({
+                      ...paymentDeadlineForm,
+                      dateAr: e.target.value,
+                    })
+                  }
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-right"
+                  placeholder="30 مايو 2026"
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-neutral-200">
+              <button
+                onClick={() => setEditingPaymentDeadline(false)}
+                disabled={paymentDeadlineSaving}
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <X size={18} />
+                {t.cancel}
+              </button>
+              <button
+                onClick={handlePaymentDeadlineSave}
+                disabled={paymentDeadlineSaving}
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-primary text-white rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {paymentDeadlineSaving ? (
+                  <>
+                    <Loader size={18} className="animate-spin" />
+                    {t.saving}
+                  </>
+                ) : (
+                  <>
+                    <Save size={18} />
+                    {t.saveChanges}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        ) : paymentDeadline ? (
+          <div className="p-6 rounded-xl border border-neutral-200 bg-neutral-50">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-neutral-500 mb-1">
+                  {language === "ar"
+                    ? "الموعد (بالإنجليزية)"
+                    : "Deadline (English)"}
+                </label>
+                <p className="text-lg font-semibold text-primary">
+                  {paymentDeadline.dateEn}
+                </p>
+              </div>
+              <div dir={language === "ar" ? "rtl" : "ltr"}>
+                <label className="block text-sm font-medium text-neutral-500 mb-1">
+                  {language === "ar"
+                    ? "الموعد (بالعربية)"
+                    : "Deadline (Arabic)"}
+                </label>
+                <p className="text-lg font-semibold text-primary">
+                  {paymentDeadline.dateAr}
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-neutral-400">
+            {language === "ar" ? "لا توجد بيانات" : "No data available"}
           </div>
         )}
       </motion.div>

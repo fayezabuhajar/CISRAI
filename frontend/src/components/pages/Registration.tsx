@@ -112,7 +112,7 @@ export default function Registration({ language }: RegistrationProps) {
     {
       id: "attendance",
       title: { en: "Attendance Only", ar: "حضور بدون ورقة" },
-      price: 75,
+      price: 100,
       inclusions: {
         en: [
           "Coffee breaks",
