@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { Admin } from "./src/models/Admin.js";
-import { Announcement } from "./src/models/Announcement.js";
-import connectDB from "./src/config/database.js";
-import { env } from "./src/config/env.js";
+import { Admin } from "./src/models/Admin";
+import { Announcement } from "./src/models/Announcement";
+import connectDB from "./src/config/database";
+import { env } from "./src/config/env";
 
 const seedDatabase = async () => {
   try {
