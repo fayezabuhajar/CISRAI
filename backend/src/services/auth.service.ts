@@ -53,7 +53,7 @@ export const authService = {
       throw new Error("User not found");
     }
 
-    const userDocument = user as UserDocument;
+    const userDocument = user as unknown as UserDocument;
     const isPasswordValid = await userDocument.comparePassword(password);
     if (!isPasswordValid) {
       throw new Error("Invalid password");

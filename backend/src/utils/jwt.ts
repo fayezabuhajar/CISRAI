@@ -1,4 +1,4 @@
-import jwt, { type SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 import { IJWTPayload } from "../types/index";
 
@@ -9,8 +9,7 @@ export const generateToken = (
   const secret = isAdmin ? env.JWT_ADMIN_SECRET : env.JWT_SECRET;
   const expiresIn = isAdmin ? env.JWT_ADMIN_EXPIRE_IN : env.JWT_EXPIRE_IN;
 
-  const options: SignOptions = { expiresIn };
-  return jwt.sign(payload, secret, options);
+  return jwt.sign(payload, secret, { expiresIn: expiresIn as any });
 };
 
 export const verifyToken = (token: string, isAdmin = false): IJWTPayload => {
