@@ -1,11 +1,10 @@
+// backend/connectDB.js
 import mongoose from "mongoose";
+import { env } from "./env";
 
 const connectDB = async () => {
   try {
-    const mongoUri =
-      process.env.MONGODB_URI || "mongodb://localhost:27017/cisrai";
-
-    const conn = await mongoose.connect(mongoUri, {
+    const conn = await mongoose.connect(env.MONGODB_URI, {
       retryWrites: true,
       w: "majority",
       serverSelectionTimeoutMS: 5000,

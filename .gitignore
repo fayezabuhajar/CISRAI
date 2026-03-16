@@ -1,0 +1,50 @@
+# Root .gitignore for CISRAI Project
+
+# Environment files
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Don't upload documentation notes (keep them local)
+# Uncomment if you want to keep deployment guides private:
+# MONGODB_FIX.md
+# FIX_IP_WHITELIST.md
+# MONGODB_IP_CORRECT_WAY.md
+
+# Node modules
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+backend/dist/
+frontend/dist/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Uploads (if you don't want to track them)
+backend/uploads/*
+!backend/uploads/.gitkeep
