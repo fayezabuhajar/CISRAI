@@ -102,8 +102,12 @@ app.use("/api/", limiter);
 app.use("/api/auth/login", authLimiter);
 app.use("/api/auth/register", authLimiter);
 
-// Health Check
+// Health Check - Available on both /health and /api/health
 app.get("/health", (req: Request, res: Response) => {
+  res.json({ status: "OK", timestamp: new Date() });
+});
+
+app.get("/api/health", (req: Request, res: Response) => {
   res.json({ status: "OK", timestamp: new Date() });
 });
 

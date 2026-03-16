@@ -1,6 +1,7 @@
 # 🚀 نشر شخصي سريع - URL واحد (مجاني 100%)
 
 ## ✨ ما سنستخدمه:
+
 - **Backend**: Render.com (مجاني)
 - **Frontend**: Vercel.com (مجاني)
 - **Database**: MongoDB Atlas (جاهز ويعمل ✅)
@@ -51,6 +52,7 @@ git push -u origin main
 ```
 
 إذا طلب username وpassword:
+
 - Username: اسم المستخدم في GitHub
 - Password: استخدم **Personal Access Token** (ليس كلمة المرور العادية)
   - اذهب لـ GitHub → Settings → Developer settings → Personal access tokens → Generate new token
@@ -120,13 +122,15 @@ ADMIN_PASSWORD = Admin@2026Change
 ### و. اختبار Backend:
 
 افتح في المتصفح:
+
 ```
 https://cisrai-backend-xyz123.onrender.com/api/health
 ```
 
 يجب أن ترى:
+
 ```json
-{"status":"OK","timestamp":"..."}
+{ "status": "OK", "timestamp": "..." }
 ```
 
 ✅ **Backend جاهز!**
@@ -192,7 +196,7 @@ Install Command: npm install (تلقائي)
 
 ### د. Environment Variables:
 
-**لا تضيف أي متغيرات!** 
+**لا تضيف أي متغيرات!**
 
 لأن `vercel.json` سيتولى الأمر تلقائياً.
 
@@ -230,11 +234,13 @@ Install Command: npm install (تلقائي)
 ### 🔗 الروابط:
 
 **للمستخدمين (الرابط الوحيد):**
+
 ```
 https://cisrai-conference-xyz.vercel.app
 ```
 
 **Backend (للمطورين فقط):**
+
 ```
 https://cisrai-backend-xyz123.onrender.com
 ```
@@ -244,17 +250,20 @@ https://cisrai-backend-xyz123.onrender.com
 ## 🧪 اختبار الموقع:
 
 ### 1. افتح الموقع:
+
 ```
 https://cisrai-conference-xyz.vercel.app
 ```
 
 ### 2. جرب تسجيل الدخول كـ Admin:
+
 ```
 Email: admin@cisrai.com
 Password: Admin@2026Change (أو ما حددته)
 ```
 
 ### 3. تحقق من Developer Console:
+
 - اضغط F12
 - اذهب لـ Network tab
 - جرب عمل أي إجراء
@@ -267,6 +276,7 @@ Password: Admin@2026Change (أو ما حددته)
 ## 📱 مشاركة الموقع:
 
 أرسل للمستخدمين:
+
 ```
 🌐 CISRAI Conference Platform
 https://cisrai-conference-xyz.vercel.app
@@ -306,11 +316,13 @@ git push
 ## ⚠️ ملاحظات مهمة:
 
 ### Render Free Tier:
+
 - ⏱️ الخدمة **تنام** بعد 15 دقيقة من عدم الاستخدام
 - 🔄 تستيقظ تلقائياً عند الزيارة (يستغرق 30 ثانية)
 - 💡 للبقاء نشطاً 24/7، يمكنك إضافة "Cron Job" (سأشرح لك إذا احتجت)
 
 ### MongoDB Atlas:
+
 - ✅ IP Whitelist مفعّل (0.0.0.0/0)
 - ✅ يعمل مع Render و Vercel تلقائياً
 
@@ -321,6 +333,7 @@ git push
 إذا أردت دومين خاص مثل `cisrai.com`:
 
 ### في Vercel:
+
 1. Settings → Domains
 2. **"Add Domain"**
 3. أدخل: `cisrai.com` أو `conference.cisrai.com`
@@ -331,14 +344,17 @@ git push
 ## 🆘 المشاكل الشائعة:
 
 ### ❌ API لا يعمل:
+
 - تحقق من `vercel.json` يحتوي رابط Backend الصحيح
 - تحقق من CORS_ORIGIN في Render
 
 ### ❌ Backend يعطي 503:
+
 - Backend نائم! افتح رابطه مباشرة لإيقاظه
 - انتظر 30 ثانية
 
 ### ❌ صفحة بيضاء:
+
 - افتح Developer Console (F12)
 - ابحث عن الخطأ
 - غالباً مشكلة API
@@ -348,10 +364,12 @@ git push
 ## 📊 مراقبة الموقع:
 
 ### Vercel:
+
 - Dashboard → Project → Logs
 - شوف عدد الزيارات والأداء
 
 ### Render:
+
 - Dashboard → Service → Logs
 - شوف requests و errors
 
@@ -381,6 +399,7 @@ git push
 ## 🎊 مبروك!
 
 موقعك الآن **لايف على الإنترنت** مع:
+
 - ✅ URL واحد احترافي
 - ✅ SSL مجاني (HTTPS)
 - ✅ سريع وآمن
