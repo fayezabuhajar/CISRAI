@@ -3,8 +3,9 @@
  * Handles all communication with the backend
  */
 
-// Default to port 5000 to match the running backend; VITE_API_URL can override.
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+// Use relative path in production, localhost in development
+const API_BASE = import.meta.env.VITE_API_URL || 
+  (import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:5000/api');
 
 // Storage keys
 const TOKEN_KEY = "auth_token";

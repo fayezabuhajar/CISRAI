@@ -67,18 +67,7 @@ export default function CallForPapers({ language }: CallForPapersProps) {
       type: "mandatory",
       icon: "indexed",
     },
-    {
-      title: {
-        en: "Scientific Journals (Optional)",
-        ar: "المجلات العلمية (اختياري)",
-      },
-      desc: {
-        en: "Publication in scientific journals is optional based on the researcher's preference.",
-        ar: "النشر في المجلات العلمية اختياري حسب رغبة الباحث.",
-      },
-      type: "optional",
-      icon: "journal",
-    },
+   
   ];
 
   const rules = [
@@ -214,11 +203,7 @@ export default function CallForPapers({ language }: CallForPapersProps) {
                     {isRtl ? "⚠️ إجباري" : "⚠️ Mandatory"}
                   </div>
                 )}
-                {opt.type === "optional" && (
-                  <div className="text-blue-600 font-bold text-sm uppercase tracking-widest">
-                    {isRtl ? "اختياري" : "Optional"}
-                  </div>
-                )}
+                
               </motion.div>
             ))}
           </div>
