@@ -338,14 +338,14 @@ export default function Registration({ language }: RegistrationProps) {
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-amber-900 mb-3">
                   {isRtl
-                    ? "ملاحظة هامة - رسوم النشر"
-                    : "Important Note - Publication Fees"}
+                    ? "ملاحظة هامة - رسوم النشر الإجبارية"
+                    : "Important Note - Mandatory Publication Fees"}
                 </h3>
                 <div className="text-amber-800 leading-relaxed space-y-2">
                   <p className="font-semibold text-base">
                     {isRtl
-                      ? "تضاف رسوم النشر في Springer-Scopus:"
-                      : "Springer-Scopus publication fees are additional:"}
+                      ? "تضاف رسوم النشر الإجباري في Springer-Scopus:"
+                      : "Mandatory Springer-Scopus publication fees:"}
                   </p>
                   <div className="flex items-baseline gap-3 bg-white/60 px-4 py-3 rounded-xl border border-amber-300">
                     <span className="text-3xl font-black text-amber-900">
@@ -354,16 +354,14 @@ export default function Registration({ language }: RegistrationProps) {
                     <span className="text-amber-700 font-bold uppercase text-sm">
                       USD
                     </span>
-                    <span className="text-amber-600 text-sm">
-                      {isRtl
-                        ? "(للباحثين الراغبين بالنشر المفهرس)"
-                        : "(for indexed publication)"}
+                    <span className="text-amber-600 text-sm font-bold">
+                      {isRtl ? "(إجباري)" : "(Mandatory)"}
                     </span>
                   </div>
-                  <p className="text-sm text-amber-700 mt-2">
+                  <p className="text-sm text-amber-700 mt-2 font-semibold">
                     {isRtl
-                      ? "* هذه الرسوم منفصلة عن رسوم المشاركة في المؤتمر وتدفع فقط عند الرغبة بالنشر في Chapter Book المفهرس."
-                      : "* These fees are separate from conference participation fees and only apply for indexed Chapter Book publication."}
+                      ? "* هذه الرسوم إجبارية لجميع المشاركين بورقة بحثية ومنفصلة عن رسوم المشاركة في المؤتمر."
+                      : "* These fees are mandatory for all participants with papers and separate from conference participation fees."}
                   </p>
                 </div>
               </div>

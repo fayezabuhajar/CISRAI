@@ -52,19 +52,19 @@ export default function CallForPapers({ language }: CallForPapersProps) {
     },
     {
       title: {
-        en: "Springer-Scopus Chapter Book",
-        ar: "نشر في Springer-Scopus",
+        en: "Springer-Scopus Chapter Book (Mandatory)",
+        ar: "نشر في Springer-Scopus (إجباري)",
       },
       desc: {
-        en: "Accepted papers will be published in a Chapter Book indexed in Scopus-Springer, subject to publisher's terms and conditions.",
-        ar: "تنشر الأوراق البحثية المقبولة في Chapter Book مفهرسة في Scopus-Springer وذلك وفق شروط وضوابط النشر للجهة الناشرة.",
+        en: "Mandatory publication of accepted papers in a Chapter Book indexed in Scopus-Springer, subject to publisher's terms and conditions.",
+        ar: "النشر الإجباري للأوراق البحثية المقبولة في Chapter Book مفهرسة في Scopus-Springer وذلك وفق شروط وضوابط النشر للجهة الناشرة.",
       },
       fee: "$400 USD",
       note: {
-        en: "Author pays publication fee",
-        ar: "يتحمل الباحث رسوم النشر",
+        en: "Mandatory for all paper submissions",
+        ar: "إجباري لجميع المشاركين بورقة بحثية",
       },
-      type: "paid",
+      type: "mandatory",
       icon: "indexed",
     },
     {
@@ -169,8 +169,8 @@ export default function CallForPapers({ language }: CallForPapersProps) {
                     className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-sm ${
                       opt.type === "free"
                         ? "bg-secondary text-primary border-accent/20"
-                        : opt.type === "paid"
-                          ? "bg-amber-50 text-amber-700 border-amber-100"
+                        : opt.type === "mandatory"
+                          ? "bg-red-50 text-red-700 border-red-200"
                           : "bg-blue-50 text-blue-700 border-blue-100"
                     }`}
                   >
@@ -209,6 +209,11 @@ export default function CallForPapers({ language }: CallForPapersProps) {
                     {isRtl ? "مجاني" : "Free"}
                   </div>
                 )}
+                {opt.type === "mandatory" && (
+                  <div className="bg-red-100 text-red-700 px-3 py-2 rounded-lg font-bold text-sm uppercase tracking-widest border border-red-200">
+                    {isRtl ? "⚠️ إجباري" : "⚠️ Mandatory"}
+                  </div>
+                )}
                 {opt.type === "optional" && (
                   <div className="text-blue-600 font-bold text-sm uppercase tracking-widest">
                     {isRtl ? "اختياري" : "Optional"}
@@ -217,13 +222,18 @@ export default function CallForPapers({ language }: CallForPapersProps) {
               </motion.div>
             ))}
           </div>
-          <div className="mt-8 p-6 bg-amber-50 rounded-2xl border border-amber-200 flex gap-4 items-start">
-            <AlertCircle className="text-amber-600 shrink-0 mt-1" size={20} />
-            <p className="text-sm text-amber-900 leading-relaxed font-medium">
-              {isRtl
-                ? "ملاحظة هامة: رسوم المشاركة في المؤتمر لا تشمل رسوم نشر البحث في Springer-Scopus."
-                : "Important Note: Conference participation fees do not include Springer-Scopus publication fees."}
-            </p>
+          <div className="mt-8 p-6 bg-red-50 rounded-2xl border border-red-200 flex gap-4 items-start">
+            <AlertCircle className="text-red-600 shrink-0 mt-1" size={20} />
+            <div className="text-sm text-red-900 leading-relaxed font-medium">
+              <p className="font-bold mb-2">
+                {isRtl ? "⚠️ ملاحظة هامة جداً:" : "⚠️ Very Important Note:"}
+              </p>
+              <p>
+                {isRtl
+                  ? "النشر في Springer-Scopus إجباري لجميع المشاركين بورقة بحثية. رسوم المشاركة في المؤتمر لا تشمل رسوم النشر البالغة $400 USD."
+                  : "Springer-Scopus publication is mandatory for all participants with papers. Conference participation fees do not include the $400 USD publication fees."}
+              </p>
+            </div>
           </div>
         </section>
 
