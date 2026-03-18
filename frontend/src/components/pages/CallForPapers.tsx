@@ -4,7 +4,6 @@ import {
   BookOpen,
   FileCheck,
   Award,
-  Info,
   AlertCircle,
   Download,
 } from "lucide-react";
@@ -67,7 +66,6 @@ export default function CallForPapers({ language }: CallForPapersProps) {
       type: "mandatory",
       icon: "indexed",
     },
-   
   ];
 
   const rules = [
@@ -203,7 +201,6 @@ export default function CallForPapers({ language }: CallForPapersProps) {
                     {isRtl ? "⚠️ إجباري" : "⚠️ Mandatory"}
                   </div>
                 )}
-                
               </motion.div>
             ))}
           </div>

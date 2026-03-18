@@ -514,7 +514,11 @@ export const settingsAPI = {
   },
 
   updateImportantDates: async (data: unknown[]) => {
-    return apiRequest("/settings/important-dates", "PUT", data as unknown as ApiPayload);
+    return apiRequest(
+      "/settings/important-dates",
+      "PUT",
+      data as unknown as ApiPayload,
+    );
   },
 
   getPatronName: async () => {
@@ -533,7 +537,11 @@ export const settingsAPI = {
   },
 
   updateSponsors: async (data: unknown[]) => {
-    return apiRequest("/settings/sponsors", "PUT", data as unknown as ApiPayload);
+    return apiRequest(
+      "/settings/sponsors",
+      "PUT",
+      data as unknown as ApiPayload,
+    );
   },
 
   getPaymentDeadline: async () => {
