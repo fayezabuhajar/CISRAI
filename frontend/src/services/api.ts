@@ -4,8 +4,11 @@
  */
 
 // Use relative path in production, localhost in development
-const API_BASE = import.meta.env.VITE_API_URL || 
-  (import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:5000/api');
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.MODE === "production"
+    ? "/api"
+    : "http://localhost:5000/api");
 
 // Storage keys
 const TOKEN_KEY = "auth_token";
@@ -511,7 +514,7 @@ export const settingsAPI = {
   },
 
   updateImportantDates: async (data: unknown[]) => {
-    return apiRequest("/settings/important-dates", "PUT", data);
+    return apiRequest("/settings/important-dates", "PUT", data as unknown as ApiPayload);
   },
 
   getPatronName: async () => {
@@ -530,7 +533,7 @@ export const settingsAPI = {
   },
 
   updateSponsors: async (data: unknown[]) => {
-    return apiRequest("/settings/sponsors", "PUT", data);
+    return apiRequest("/settings/sponsors", "PUT", data as unknown as ApiPayload);
   },
 
   getPaymentDeadline: async () => {
