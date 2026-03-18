@@ -676,33 +676,33 @@ export default function LandingPage({ language }: LandingPageProps) {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="group h-full"
+                  className="group"
                 >
                   <a
                     href={sponsor.websiteUrl || "#"}
                     target={sponsor.websiteUrl ? "_blank" : undefined}
                     rel={sponsor.websiteUrl ? "noopener noreferrer" : undefined}
-                    className={`flex flex-col h-full bg-white backdrop-blur-sm rounded-2xl p-6 border border-neutral-200/60 hover:border-primary/50 hover:bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                    className={`flex flex-col bg-white backdrop-blur-sm rounded-2xl p-6 border border-neutral-200/60 hover:border-primary/50 hover:bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 min-h-[280px] ${
                       sponsor.websiteUrl ? "cursor-pointer" : "cursor-default"
                     }`}
                   >
-                    <div className="aspect-square flex items-center justify-center flex-shrink-0">
+                    <div className="flex-1 flex items-center justify-center p-4">
                       {sponsor.logoUrl ? (
                         <img
                           src={sponsor.logoUrl}
                           alt={
                             language === "ar" ? sponsor.nameAr : sponsor.nameEn
                           }
-                          className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-110"
+                          className="max-w-full max-h-[160px] w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-110"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-neutral-50 rounded-xl">
+                        <div className="w-full h-32 flex items-center justify-center bg-neutral-50 rounded-xl">
                           <Users size={48} className="text-neutral-300" />
                         </div>
                       )}
                     </div>
-                    <div className="mt-auto pt-4 text-center">
-                      <h3 className="font-bold text-primary text-sm">
+                    <div className="pt-4 mt-auto text-center border-t border-neutral-100">
+                      <h3 className="font-bold text-primary text-sm leading-tight">
                         {language === "ar" ? sponsor.nameAr : sponsor.nameEn}
                       </h3>
                     </div>
