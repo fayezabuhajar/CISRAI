@@ -9,7 +9,7 @@ export default defineConfig({
       onwarn(warning, warn) {
         // Suppress all warnings
         return;
-      }
-    }
-  }
+      },
+    },
+  },
 });

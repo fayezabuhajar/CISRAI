@@ -324,6 +324,53 @@ export default function Registration({ language }: RegistrationProps) {
           ))}
         </div>
 
+        {/* Publication Fee Notice */}
+        <div className="mb-16 max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-[32px] p-8 border-2 border-amber-200 shadow-lg"
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center shrink-0 shadow-md">
+                <AlertCircle size={24} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-amber-900 mb-3">
+                  {isRtl
+                    ? "ملاحظة هامة - رسوم النشر"
+                    : "Important Note - Publication Fees"}
+                </h3>
+                <div className="text-amber-800 leading-relaxed space-y-2">
+                  <p className="font-semibold text-base">
+                    {isRtl
+                      ? "تضاف رسوم النشر في Springer-Scopus:"
+                      : "Springer-Scopus publication fees are additional:"}
+                  </p>
+                  <div className="flex items-baseline gap-3 bg-white/60 px-4 py-3 rounded-xl border border-amber-300">
+                    <span className="text-3xl font-black text-amber-900">
+                      $400
+                    </span>
+                    <span className="text-amber-700 font-bold uppercase text-sm">
+                      USD
+                    </span>
+                    <span className="text-amber-600 text-sm">
+                      {isRtl
+                        ? "(للباحثين الراغبين بالنشر المفهرس)"
+                        : "(for indexed publication)"}
+                    </span>
+                  </div>
+                  <p className="text-sm text-amber-700 mt-2">
+                    {isRtl
+                      ? "* هذه الرسوم منفصلة عن رسوم المشاركة في المؤتمر وتدفع فقط عند الرغبة بالنشر في Chapter Book المفهرس."
+                      : "* These fees are separate from conference participation fees and only apply for indexed Chapter Book publication."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Payment Info */}
           <section className="space-y-8">

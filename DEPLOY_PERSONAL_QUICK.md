@@ -221,7 +221,7 @@ Install Command: npm install (تلقائي)
 2. اذهب لـ **Environment**
 3. عدّل `CORS_ORIGIN`:
    ```
-   CORS_ORIGIN = https://cisrai-conference-xyz.vercel.app
+   CORS_ORIGIN = https://cisrai-a26m7meso-fayezabuhajars-projects.vercel.app
    ```
    ⚠️ استبدل برابط Vercel الخاص بك!
 4. اضغط **"Save Changes"**

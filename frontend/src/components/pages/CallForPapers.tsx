@@ -39,24 +39,45 @@ export default function CallForPapers({ language }: CallForPapersProps) {
 
   const publicationOptions = [
     {
-      title: { en: "Conference Proceedings", ar: "كتاب وقائع المؤتمر" },
+      title: {
+        en: "Conference Proceedings (Free)",
+        ar: "كتاب وقائع المؤتمر (مجاناً)",
+      },
       desc: {
-        en: "Free publication in the official conference proceedings book.",
-        ar: "نشر مجاني في كتاب وقائع المؤتمر الرسمي.",
+        en: "Paper abstracts will be published in the conference proceedings book free of charge.",
+        ar: "تنشر ملخصات الأوراق البحثية في كتاب وقائع المؤتمر مجاناً.",
       },
       type: "free",
+      icon: "proceedings",
     },
     {
       title: {
-        en: "Indexed Journals / Chapter Books",
-        ar: "المجلات المصنفة / كتب الفصول",
+        en: "Springer-Scopus Chapter Book",
+        ar: "نشر في Springer-Scopus",
       },
       desc: {
-        en: "Optional publication in Springer or Scopus indexed journals.",
-        ar: "نشر اختياري في مجلات Springer أو Scopus المصنفة.",
+        en: "Accepted papers will be published in a Chapter Book indexed in Scopus-Springer, subject to publisher's terms and conditions.",
+        ar: "تنشر الأوراق البحثية المقبولة في Chapter Book مفهرسة في Scopus-Springer وذلك وفق شروط وضوابط النشر للجهة الناشرة.",
       },
-      fee: "400 USD",
+      fee: "$400 USD",
+      note: {
+        en: "Author pays publication fee",
+        ar: "يتحمل الباحث رسوم النشر",
+      },
       type: "paid",
+      icon: "indexed",
+    },
+    {
+      title: {
+        en: "Scientific Journals (Optional)",
+        ar: "المجلات العلمية (اختياري)",
+      },
+      desc: {
+        en: "Publication in scientific journals is optional based on the researcher's preference.",
+        ar: "النشر في المجلات العلمية اختياري حسب رغبة الباحث.",
+      },
+      type: "optional",
+      icon: "journal",
     },
   ];
 
@@ -136,7 +157,7 @@ export default function CallForPapers({ language }: CallForPapersProps) {
           <h2 className="text-3xl font-bold text-primary mb-10 text-center">
             {t.pubTitle}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {publicationOptions.map((opt, i) => (
               <motion.div
                 key={i}
@@ -145,43 +166,63 @@ export default function CallForPapers({ language }: CallForPapersProps) {
               >
                 <div className="flex items-center gap-4 mb-6">
                   <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-sm ${opt.type === "free" ? "bg-secondary text-primary border-accent/20" : "bg-amber-50 text-amber-700 border-amber-100"}`}
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-sm ${
+                      opt.type === "free"
+                        ? "bg-secondary text-primary border-accent/20"
+                        : opt.type === "paid"
+                          ? "bg-amber-50 text-amber-700 border-amber-100"
+                          : "bg-blue-50 text-blue-700 border-blue-100"
+                    }`}
                   >
-                    {opt.type === "free" ? (
+                    {opt.icon === "proceedings" ? (
                       <BookOpen size={24} className="text-accent" />
-                    ) : (
+                    ) : opt.icon === "indexed" ? (
                       <Award size={24} />
+                    ) : (
+                      <FileText size={24} />
                     )}
                   </div>
-                  <h3 className="text-xl font-bold text-primary">
+                  <h3 className="text-lg font-bold text-primary">
                     {isRtl ? opt.title.ar : opt.title.en}
                   </h3>
                 </div>
-                <p className="text-neutral-600 mb-6 leading-relaxed">
+                <p className="text-neutral-600 mb-6 leading-relaxed text-sm">
                   {isRtl ? opt.desc.ar : opt.desc.en}
                 </p>
                 {opt.fee && (
-                  <div className="flex items-center gap-2 text-primary font-bold text-lg">
-                    <span className="text-sm uppercase tracking-widest text-neutral-400">
-                      {isRtl ? "الرسوم:" : "Fee:"}
-                    </span>
-                    <span className="text-accent">{opt.fee}</span>
-                  </div>
+                  <>
+                    <div className="flex items-center gap-2 text-primary font-bold text-lg mb-2">
+                      <span className="text-xs uppercase tracking-widest text-neutral-400">
+                        {isRtl ? "الرسوم:" : "Fee:"}
+                      </span>
+                      <span className="text-accent">{opt.fee}</span>
+                    </div>
+                    {opt.note && (
+                      <p className="text-xs text-neutral-500 italic">
+                        {isRtl ? opt.note.ar : opt.note.en}
+                      </p>
+                    )}
+                  </>
                 )}
-                {!opt.fee && (
+                {opt.type === "free" && (
                   <div className="text-accent font-bold text-lg uppercase tracking-widest">
                     {isRtl ? "مجاني" : "Free"}
+                  </div>
+                )}
+                {opt.type === "optional" && (
+                  <div className="text-blue-600 font-bold text-sm uppercase tracking-widest">
+                    {isRtl ? "اختياري" : "Optional"}
                   </div>
                 )}
               </motion.div>
             ))}
           </div>
-          <div className="mt-8 p-6 bg-secondary/50 rounded-2xl border border-accent/10 flex gap-4 items-start">
-            <Info className="text-accent shrink-0" />
-            <p className="text-sm text-primary/80 leading-relaxed font-medium">
+          <div className="mt-8 p-6 bg-amber-50 rounded-2xl border border-amber-200 flex gap-4 items-start">
+            <AlertCircle className="text-amber-600 shrink-0 mt-1" size={20} />
+            <p className="text-sm text-amber-900 leading-relaxed font-medium">
               {isRtl
-                ? "ملاحظة: رسوم المشاركة في المؤتمر لا تشمل رسوم نشر Springer/Scopus. النشر في المجلات اختياري حسب رغبة الباحث."
-                : "Note: Conference participation fees do not include Springer/Scopus publication fees. Journal publication is optional based on author preference."}
+                ? "ملاحظة هامة: رسوم المشاركة في المؤتمر لا تشمل رسوم نشر البحث في Springer-Scopus."
+                : "Important Note: Conference participation fees do not include Springer-Scopus publication fees."}
             </p>
           </div>
         </section>
