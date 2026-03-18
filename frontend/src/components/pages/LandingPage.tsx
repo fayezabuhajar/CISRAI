@@ -676,17 +676,17 @@ export default function LandingPage({ language }: LandingPageProps) {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="group"
+                  className="group h-full"
                 >
                   <a
                     href={sponsor.websiteUrl || "#"}
                     target={sponsor.websiteUrl ? "_blank" : undefined}
                     rel={sponsor.websiteUrl ? "noopener noreferrer" : undefined}
-                    className={`block bg-white backdrop-blur-sm rounded-2xl p-6 border border-neutral-200/60 hover:border-primary/50 hover:bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                    className={`flex flex-col h-full bg-white backdrop-blur-sm rounded-2xl p-6 border border-neutral-200/60 hover:border-primary/50 hover:bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                       sponsor.websiteUrl ? "cursor-pointer" : "cursor-default"
                     }`}
                   >
-                    <div className="aspect-square flex items-center justify-center">
+                    <div className="aspect-square flex items-center justify-center flex-shrink-0">
                       {sponsor.logoUrl ? (
                         <img
                           src={sponsor.logoUrl}
