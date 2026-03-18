@@ -701,7 +701,7 @@ export default function LandingPage({ language }: LandingPageProps) {
                         </div>
                       )}
                     </div>
-                    <div className="mt-4 text-center">
+                    <div className="mt-auto pt-4 text-center">
                       <h3 className="font-bold text-primary text-sm">
                         {language === "ar" ? sponsor.nameAr : sponsor.nameEn}
                       </h3>

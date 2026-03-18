@@ -146,7 +146,7 @@ export default function CallForPapers({ language }: CallForPapersProps) {
           <h2 className="text-3xl font-bold text-primary mb-10 text-center">
             {t.pubTitle}
           </h2>
-          <div className="max-w-2xl mx-auto flex flex-col gap-8">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             {publicationOptions.map((opt, i) => (
               <motion.div
                 key={i}
