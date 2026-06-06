@@ -27,4 +27,4 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://cisrai-backend.onrender.com
+        value: https://flavor-table-gvuz.onrender.com
